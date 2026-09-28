@@ -1,13 +1,6 @@
-import { render, screen } from '@testing-library/react';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
-import { appRoutes } from './routes';
+import { screen } from '@testing-library/react';
 import { NAV_ITEMS } from './components/layout/Sidebar';
-import { ToastProvider } from './components/ui';
-
-function renderAt(path: string) {
-  const router = createMemoryRouter(appRoutes, { initialEntries: [path] });
-  return render(<ToastProvider><RouterProvider router={router} /></ToastProvider>);
-}
+import { renderAt } from './test/renderApp';
 
 describe('app shell', () => {
   it('renders the 10 navigation items with the expected labels', () => {

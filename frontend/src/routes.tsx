@@ -3,10 +3,15 @@ import { AppShell } from './components/layout/AppShell';
 import NotFound from './pages/NotFound';
 import Placeholder from './pages/Placeholder';
 import Styleguide from './pages/Styleguide';
+import Login from './pages/Login';
+import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
 export const appRoutes: RouteObject[] = [
+  { path: '/login', element: <Login /> },
   {
+    element: <ProtectedRoute />,
+    children: [{
     element: <AppShell />,
     children: [
       { path: '/', element: <Navigate to="/dashboard" replace /> },
@@ -26,6 +31,7 @@ export const appRoutes: RouteObject[] = [
       ...(import.meta.env.DEV || import.meta.env.MODE === 'test' ? [{ path: '/styleguide', element: <Styleguide /> }] : []),
       { path: '*', element: <NotFound /> },
     ],
+    }],
   },
 ];
 
