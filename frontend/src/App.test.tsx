@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { NAV_ITEMS } from './components/layout/Sidebar';
-import { renderAt } from './test/renderApp';
+import { dataReady, renderAt } from './test/renderApp';
 
 describe('app shell', () => {
   it('renders the 10 navigation items with the expected labels', () => {
@@ -18,8 +18,9 @@ describe('app shell', () => {
     expect(screen.getByRole('link', { name: 'Dashboard' })).not.toHaveAttribute('aria-current');
   });
 
-  it('shows NotFound for unknown routes', () => {
+  it('shows NotFound for unknown routes', async () => {
     renderAt('/xyz');
+    await dataReady();
     expect(screen.getByText(/could not find that page/i)).toBeInTheDocument();
   });
 
@@ -31,8 +32,9 @@ describe('app shell', () => {
     }
   });
 
-  it('shows a clear placeholder for unbuilt screens', () => {
+  it('shows a clear placeholder for unbuilt screens', async () => {
     renderAt('/settings');
+    await dataReady();
     expect(screen.getByText('Not part of this build')).toBeInTheDocument();
   });
 });
