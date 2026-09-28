@@ -3,6 +3,7 @@ import type { AlertT, ScenarioT } from '../../types/contract';
 import type { AlertTabId } from './tabs';
 import { GraphTab } from '../graph/GraphTab';
 import { TimelineTab } from '../timeline/TimelineTab';
+import { EmployeeTab } from '../employee/EmployeeTab';
 
 export interface TabViewProps { alert: AlertT; scenario: ScenarioT | null }
 
@@ -14,7 +15,7 @@ const Pending = ({ label }: { label: string }) => (
 export const TAB_VIEWS: Record<Exclude<AlertTabId, 'overview'>, ComponentType<TabViewProps>> = {
   graph: GraphTab,
   timeline: TimelineTab,
-  employee: () => <Pending label="Employee Activity" />,
+  employee: EmployeeTab,
   evidence: () => <Pending label="Evidence" />,
   'but-for': () => <Pending label="But-for Analysis" />,
   notes: () => <Pending label="Notes" />,
