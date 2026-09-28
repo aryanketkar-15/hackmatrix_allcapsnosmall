@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
 import type { AlertT, CaseT, CoreFileT, MetricsFileT, NoteT, ScenarioT } from '../types/contract';
-import { createFixtureLoader, type Loader } from './loader';
+import { createDefaultLoader, type Loader } from './loader';
 
 export interface Selection { kind: 'txn' | 'event' | 'node'; id: string }
 export interface ActivityEntry { id: string; alertId: string; at: string; actor: string; text: string }
@@ -17,16 +17,19 @@ export interface StoreState {
   activity: ActivityEntry[];
   selection: Selection | null;
   overlay: string[];
+  /** set when the API was unavailable and bundled fixtures are being used instead */
+  fallback: string | null;
 }
 
 export const initialState: StoreState = {
   phase: 'loading', error: null, core: null, metrics: null, scenarios: {}, alerts: [], cases: [], notes: [],
-  activity: [], selection: null, overlay: [],
+  activity: [], selection: null, overlay: [], fallback: null,
 };
 
 export type Action =
   | { type: 'LOADED'; core: CoreFileT; metrics: MetricsFileT }
   | { type: 'ERROR'; message: string }
+  | { type: 'FALLBACK'; message: string }
   | { type: 'SCENARIO_LOADED'; scenario: ScenarioT }
   | { type: 'SELECT'; selection: Selection | null }
   | { type: 'SET_OVERLAY'; ids: string[] }
@@ -42,6 +45,8 @@ export function reducer(state: StoreState, action: Action): StoreState {
       return { ...state, phase: 'ready', error: null, core: action.core, metrics: action.metrics, alerts: action.core.alerts, cases: action.core.cases };
     case 'ERROR':
       return { ...state, phase: 'error', error: action.message };
+    case 'FALLBACK':
+      return state.fallback ? state : { ...state, fallback: action.message };
     case 'SCENARIO_LOADED':
       return { ...state, scenarios: { ...state.scenarios, [action.scenario.id]: action.scenario } };
     case 'SELECT':
@@ -73,9 +78,12 @@ interface StoreApi {
 
 const Ctx = createContext<StoreApi | null>(null);
 
-export function StoreProvider({ children, loader }: { children: ReactNode; loader?: Loader }) {
-  const ldr = useMemo(() => loader ?? createFixtureLoader(), [loader]);
+export function StoreProvider({ children, loader, makeLoader }: { children: ReactNode; loader?: Loader; makeLoader?: (onFallback: (reason: string) => void) => Loader }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const ldr = useMemo(
+    () => loader ?? (makeLoader ?? createDefaultLoader)((message) => dispatch({ type: 'FALLBACK', message })),
+    [loader, makeLoader],
+  );
 
   useEffect(() => {
     let cancelled = false;

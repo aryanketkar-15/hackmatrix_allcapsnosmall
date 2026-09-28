@@ -60,3 +60,37 @@ export function createFixtureLoader(fetcher: FetchLike = (u) => fetch(u), base =
     },
   };
 }
+
+/**
+ * API mode: read from the fixture API, validating every response with the same zod schemas. On any failure (network,
+ * status, invalid data) fall back to the bundled fixtures and tell the UI so it can show an "offline fixtures" banner.
+ */
+export function createApiLoader(fetcher: FetchLike, apiBase: string, fallback: Loader, onFallback: (reason: string) => void): Loader {
+  const base = apiBase.replace(/\/+$/, '');
+  async function viaApi<T>(url: string, name: string, schema: ZodType<T>, alt: () => Promise<T>): Promise<T> {
+    try {
+      return await fetchValidated(fetcher, url, name, schema);
+    } catch (e) {
+      const reason = e instanceof Error ? e.message : String(e);
+      console.error(`API unavailable for ${name}; using bundled fixtures. ${reason}`);
+      onFallback(reason);
+      return alt();
+    }
+  }
+  return {
+    loadCore: () => viaApi(`${base}/api/core`, 'core (API)', CoreFile, () => fallback.loadCore()),
+    loadMetrics: () => viaApi(`${base}/api/metrics`, 'metrics (API)', MetricsFile, () => fallback.loadMetrics()),
+    loadScenario: (file) => {
+      const id = file.replace(/^.*\//, '').replace(/\.json$/, '');
+      return viaApi(`${base}/api/scenarios/${encodeURIComponent(id)}`, `${id} (API)`, Scenario, () => fallback.loadScenario(file));
+    },
+  };
+}
+
+/** Loader for the current data source. `fixtures` (default) never touches the network beyond static files. */
+export function createDefaultLoader(onFallback: (reason: string) => void): Loader {
+  const fixtures = createFixtureLoader();
+  if (dataSource() !== 'api') return fixtures;
+  const base = (import.meta.env.VITE_API_BASE as string | undefined) ?? 'http://localhost:8000';
+  return createApiLoader((u) => fetch(u), base, fixtures, onFallback);
+}

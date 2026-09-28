@@ -9,3 +9,4 @@ export * from './Modal';
 export * from './Toast';
 export * from './Misc';
 export * from './Feedback';
+export * from './FallbackBanner';
