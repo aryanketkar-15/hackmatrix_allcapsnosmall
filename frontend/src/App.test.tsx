@@ -33,7 +33,7 @@ describe('app shell', () => {
   });
 
   it('shows a clear placeholder for unbuilt screens', async () => {
-    renderAt('/settings');
+    renderAt('/graph-explorer');
     await dataReady();
     expect(screen.getByText('Not part of this build')).toBeInTheDocument();
   });
