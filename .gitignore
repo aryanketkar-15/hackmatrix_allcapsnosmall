@@ -1,0 +1,15 @@
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/dist/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.local
+*.mp4
+*.mov
+/exports/
+.claude/
