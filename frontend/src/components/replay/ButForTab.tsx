@@ -3,6 +3,7 @@ import { Card, EmptyState, Tabs } from '../ui';
 import { RemovePanel } from './RemovePanel';
 import { noReplayReason } from './matchVariant';
 import { TwinPanel, useTwinPair } from '../twin/TwinPanel';
+import { ReachPanel } from '../reach/ReachPanel';
 import type { TabViewProps } from '../alerts/tabViews';
 
 type Sub = 'replay' | 'twin' | 'exposure';
@@ -23,7 +24,7 @@ export function ButForTab({ alert, scenario }: TabViewProps) {
         items={[
           { id: 'replay', label: 'Replay (Remove)' },
           { id: 'twin', label: 'Legitimate twin', disabled: twinDisabled, title: twinDisabled ? 'No legitimate twin exists for this scenario' : undefined },
-          { id: 'exposure', label: 'Exposure (Reach)', disabled: true, title: 'Exposure scan arrives in a later milestone' },
+          { id: 'exposure', label: 'Exposure (Reach)' },
         ]}
       />
       {sub === 'replay' ? (
@@ -32,6 +33,7 @@ export function ButForTab({ alert, scenario }: TabViewProps) {
         )
       ) : null}
       {sub === 'twin' ? <TwinPanel scenario={scenario} /> : null}
+      {sub === 'exposure' ? <ReachPanel reach={scenario.reach} /> : null}
     </div>
   );
 }
