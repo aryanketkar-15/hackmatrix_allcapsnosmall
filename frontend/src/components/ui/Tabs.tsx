@@ -53,8 +53,7 @@ export function Tabs({
             onClick={() => onChange(t.id)}
             onKeyDown={(e) => onKey(e, t.id)}
           >
-            {t.label}
-            {t.count !== undefined ? <span className="ml-1 opacity-80">({t.count})</span> : null}
+            {t.count !== undefined ? `${t.label} (${t.count})` : t.label}
           </button>
         );
       })}

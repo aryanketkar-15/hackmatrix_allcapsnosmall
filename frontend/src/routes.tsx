@@ -5,6 +5,7 @@ import Placeholder from './pages/Placeholder';
 import Styleguide from './pages/Styleguide';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Alerts from './pages/Alerts';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -17,7 +18,7 @@ export const appRoutes: RouteObject[] = [
     children: [
       { path: '/', element: <Navigate to="/dashboard" replace /> },
       { path: '/dashboard', element: <Dashboard /> },
-      { path: '/alerts', element: <Placeholder title="Alerts" /> },
+      { path: '/alerts', element: <Alerts /> },
       { path: '/alerts/:id/:tab?', element: <Placeholder title="Alert" /> },
       { path: '/cases', element: <Placeholder title="Investigations" /> },
       { path: '/customers', element: <Placeholder title="Customers" /> },
