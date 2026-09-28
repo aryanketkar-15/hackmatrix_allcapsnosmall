@@ -1,3 +1,13 @@
+import { useMemo } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import { createAppRouter } from './routes';
+import { ToastProvider } from './components/ui';
+
 export default function App() {
-  return <div className="p-6 text-lg font-semibold">KHOJI</div>;
+  const router = useMemo(() => createAppRouter(), []);
+  return (
+    <ToastProvider>
+      <RouterProvider router={router} />
+    </ToastProvider>
+  );
 }
