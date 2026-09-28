@@ -1,0 +1,53 @@
+# S1-T - legitimate twin of S1: the customer lost the phone and recovered via V-CIP video verification.
+# Same actions, different authorization. Scenario parameters, not measured results.
+id: S1T
+kind: TWIN
+twinOf: S1
+level: INFO
+title: Mobile recovery via V-CIP (legitimate twin)
+customerId: C002
+victimAccountIds: [A-002]
+employeeIds: [E09]
+beneficiaryIds: []
+customerIds: [C002]
+explanation: "Customer lost their phone and completed V-CIP video KYC (Grade A). The confirmation alert went to the old number and the cooling period was respected."
+divergenceNote: null
+
+alert: null
+
+nodes:
+  - {id: C002, kind: customer, label: Customer C002, sub: Regular Customer, x: 110, y: 70}
+  - {id: E09, kind: employee, label: Employee E09, sub: Branch Staff, x: 110, y: 300}
+  - {id: A-002, kind: account, label: A, sub: A-002, balance: 1200000, x: 430, y: 150}
+
+transactions:
+  - {id: T1, from: A-002, to: FD-2, amount: 250000, at: "2024-04-12 11:30", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+
+timeline:
+  - {id: ev-vcip, at: "2024-04-10 15:00", category: ACCOUNT_STATE_CHANGE, title: V-CIP video verification completed, detail: "Customer verified by video KYC; recovery request logged (Grade A).", actorId: E09}
+  - {id: ev-mobile, at: "2024-04-10 15:10", category: ACCOUNT_STATE_CHANGE, title: Mobile number changed, detail: "Old: ••••••441 → New: ••••••802 · Account A-002 · customer request on file", actorId: E09}
+  - {id: ev-notify, at: "2024-04-10 15:11", category: CONTROL_CHECK, title: Alert sent to the old number, detail: Confirmation delivered to ••••••441; cooling period of 24 hours applied.}
+  - {id: ev-t1, at: "2024-04-12 11:30", category: TRANSACTION, title: Transfer to own account, detail: "₹2,50,000 · A-002 → FD-2 (own fixed deposit)", txnId: T1}
+
+controls:
+  - {id: ctl-mfa, name: MFA (one-time password), outcome: PASS, integrity: GENUINE, reason: OTP delivered to the number confirmed through V-CIP (Grade A), writerEventId: ev-mobile, writerGrade: A}
+  - {id: ctl-cooldown, name: New-beneficiary cooling period, outcome: PASS, integrity: GENUINE, reason: 24-hour cooling period observed before the transfer, writerEventId: null, writerGrade: null}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: FOUND, detail: V-CIP recovery request on file.}
+  - {key: employee-authorization, label: Employee Authorization, status: FOUND, detail: Independent checker approved the change.}
+  - {key: mfa-verification, label: MFA Verification, status: FOUND, detail: OTP delivered to the verified number.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: AVAILABLE, detail: V-CIP recording retained.}
+
+pathSteps:
+  - {key: contact-change, label: Mobile number changed, detail: Registered mobile replaced after phone loss., artifact: V-CIP video verification by the customer, grade: A, integrity: GENUINE}
+  - {key: cooldown, label: Cooling period, detail: Delay before new-beneficiary transfers., artifact: "Respected: 24-hour hold observed", grade: null, integrity: GENUINE}
+  - {key: beneficiary, label: Beneficiary added, detail: New payee registered., artifact: Added by the customer in the app; the old number was alerted, grade: A, integrity: GENUINE}
+  - {key: mfa, label: OTP verification, detail: One-time password for the transfer., artifact: OTP delivered to the verified number, grade: null, integrity: GENUINE}
+  - {key: transfer, label: Funds moved, detail: Money leaves the account., artifact: Single transfer to the customer's own account, grade: null, integrity: GENUINE}
+
+connections: []
+insiders: []
+replay: null
+reach: []

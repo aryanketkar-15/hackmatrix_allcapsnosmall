@@ -271,6 +271,7 @@ export const Scenario = so({
   level: AlertLevel,
   title: z.string(),
   customerId: customerId.nullable(),
+  victimAccountIds: z.array(z.string()),
   nodes: z.array(GraphNode),
   transactions: z.array(Transaction),
   timeline: z.array(TimelineEntry),

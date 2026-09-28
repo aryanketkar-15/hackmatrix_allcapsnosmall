@@ -286,6 +286,7 @@ class Scenario(Strict):
     level: AlertLevel
     title: str
     customerId: Optional[CustomerId]
+    victimAccountIds: list[str]
     nodes: list[GraphNode]
     transactions: list[Transaction]
     timeline: list[TimelineEntry]
