@@ -12,6 +12,8 @@ import Customers from './pages/Customers';
 import CustomerProfile from './pages/CustomerProfile';
 import Analytics from './pages/Analytics';
 import Reports from './pages/Reports';
+import Employees from './pages/Employees';
+import EmployeeProfile from './pages/EmployeeProfile';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -32,8 +34,8 @@ export const appRoutes: RouteObject[] = [
       { path: '/analytics', element: <Analytics /> },
       { path: '/reports', element: <Reports /> },
       { path: '/transactions', element: <Placeholder title="Transactions" /> },
-      { path: '/employees', element: <Placeholder title="Employees" /> },
-      { path: '/employees/:id', element: <Placeholder title="Employee" /> },
+      { path: '/employees', element: <Employees /> },
+      { path: '/employees/:id', element: <EmployeeProfile /> },
       { path: '/graph-explorer', element: <Placeholder title="Graph Explorer" /> },
       { path: '/settings', element: <Placeholder title="Settings" /> },
       ...(import.meta.env.DEV || import.meta.env.MODE === 'test' ? [{ path: '/styleguide', element: <Styleguide /> }] : []),
