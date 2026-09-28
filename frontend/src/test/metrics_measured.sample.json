@@ -1,0 +1,10 @@
+{
+  "status": "MEASURED",
+  "definitions": [
+    { "id": "M01", "name": "Detection accuracy", "description": "TEST-ONLY sample; never served." },
+    { "id": "M02", "name": "False-positive rate on legitimate twins", "description": "TEST-ONLY sample; never served." }
+  ],
+  "baselines": [{ "id": "B0", "name": "Naive time-window linking", "description": "sample" }],
+  "ablations": [{ "id": "AB1", "name": "+ versioned dependency" }],
+  "values": { "M01": 0.5, "M02": 0.25 }
+}
