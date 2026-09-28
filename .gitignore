@@ -12,3 +12,4 @@ test-results/
 *.mp4
 *.mov
 /exports/
+*.tsbuildinfo

@@ -41,7 +41,8 @@ export const MoneyGraph = forwardRef<MoneyGraphHandle, Props>(function MoneyGrap
       headless,
       elements: toElements(scenario),
       style: GRAPH_STYLE,
-      layout: { name: 'grid' },
+      // 'preset' keeps the authored node positions (the default 'null' layout would zero them)
+      layout: { name: 'preset' },
       minZoom: 0.3,
       maxZoom: 2.5,
       wheelSensitivity: 0.2,

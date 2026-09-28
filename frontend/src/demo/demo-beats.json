@@ -1,0 +1,18 @@
+[
+  { "id": "login", "title": "Sign in", "narrator": "Rishi", "path": "/login", "say": "KHOJI links people, actions and money. Sign-in here is a UI gate for the demo only." },
+  { "id": "dashboard", "title": "Dashboard", "narrator": "Chetan", "path": "/dashboard", "say": "Every number is computed from scripted seed data: alerts, risk distribution and top patterns." },
+  { "id": "alerts", "title": "Alerts list", "narrator": "Rishi", "path": "/alerts?level=HIGH", "say": "Filter to High, then open the hero alert, ALT-2024-001." },
+  { "id": "overview", "title": "Alert overview", "narrator": "Rishi", "path": "/alerts/ALT-2024-001/overview", "say": "A risk level with reasons, never a single score. Derived facts and related entities." },
+  { "id": "graph", "title": "Transaction graph", "narrator": "Chetan", "path": "/alerts/ALT-2024-001/graph", "say": "A circular transfer A to B to C to A, with dashed links to the employee credentials." },
+  { "id": "timeline", "title": "Timeline", "narrator": "Chetan", "path": "/alerts/ALT-2024-001/timeline", "say": "Mobile change, cooling-period override, beneficiary added, then a MFA that passed on a tainted number." },
+  { "id": "employee", "title": "Employee activity", "narrator": "Shanteshwar", "path": "/alerts/ALT-2024-001/employee", "say": "Valid permissions, misused: signals P1 to P10 are signals, not findings of intent." },
+  { "id": "evidence", "title": "Evidence and control path", "narrator": "Rishi", "path": "/alerts/ALT-2024-001/evidence", "say": "Tainted MFA, the hollow control path, missing CCTV, and a real downloadable document." },
+  { "id": "butfor", "title": "But-for replay", "narrator": "Aryan", "path": "/alerts/ALT-2024-001/but-for", "say": "Toggle the mobile change: the path fails. This result is precomputed in the prototype." },
+  { "id": "twin", "title": "Legitimate twin", "narrator": "Chetan", "path": "/alerts/ALT-2024-001/but-for?view=twin", "say": "Same actions, different authorization: the divergence point explains why the twin stays quiet." },
+  { "id": "reach", "title": "Exposure (Reach)", "narrator": "Shanteshwar", "path": "/alerts/ALT-2024-001/but-for?view=exposure", "say": "Other accounts in the same state before any transfer. Values are scenario values, precomputed." },
+  { "id": "splitting", "title": "Splitting and payout twin", "narrator": "Chetan", "path": "/alerts/ALT-2024-002/but-for?view=twin", "say": "Structuring after two limit raises versus a payout batch under a pre-dated mandate." },
+  { "id": "profile", "title": "Profile mismatch", "narrator": "Rishi", "path": "/customers/C005/analysis", "say": "Observed inflow far above declared income, and the profile edit that hid the mismatch." },
+  { "id": "workflow", "title": "Assign, status, decision", "narrator": "Shanteshwar", "path": "/alerts/ALT-2024-003/overview", "say": "Assign to an investigator, move the status, and record a decision with a required rationale." },
+  { "id": "report", "title": "Report and export", "narrator": "Shanteshwar", "path": "/reports?alert=ALT-2024-001", "say": "Generate the report, download the hashed evidence pack and verify it." },
+  { "id": "evaluation", "title": "Evaluation plan", "narrator": "Chetan", "path": "/analytics?tab=evaluation", "say": "Evaluation is pending. This page states what will be measured and against which baselines." }
+]

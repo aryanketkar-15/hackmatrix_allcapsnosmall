@@ -11,7 +11,7 @@ export function TopPatterns({ alerts }: { alerts: AlertT[] }) {
       {rows.length === 0 ? <EmptyState title="No patterns yet" /> : (
         <ul className="space-y-2.5 px-4 pb-4 pt-1">
           {rows.map((r) => (
-            <li key={r.type} className="grid grid-cols-[8.5rem_1fr_1.5rem] items-center gap-2 text-xs">
+            <li key={r.type} className="grid grid-cols-[11rem_1fr_1.5rem] items-center gap-2 text-xs">
               <span className="truncate text-ink">{TYPE_LABEL[r.type]}</span>
               <span className="h-2 overflow-hidden rounded-full bg-page" aria-hidden>
                 <span className="block h-full rounded-full bg-primary" style={{ width: `${(r.count / max) * 100}%` }} />

@@ -17,10 +17,14 @@ import Transactions from './pages/Transactions';
 import Settings from './pages/Settings';
 import GraphExplorer from './pages/GraphExplorer';
 import { ProtectedRoute } from './auth/ProtectedRoute';
+import { DemoLayout } from './demo/DemoController';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
-export const appRoutes: RouteObject[] = [
+export const appRoutes: RouteObject[] = [{
+  element: <DemoLayout />,
+  children: [
   { path: '/login', element: <Login /> },
+  { path: '/demo', element: <></> },
   {
     element: <ProtectedRoute />,
     children: [{
@@ -45,6 +49,7 @@ export const appRoutes: RouteObject[] = [
     ],
     }],
   },
-];
+  ],
+}];
 
 export const createAppRouter = () => createBrowserRouter(appRoutes);

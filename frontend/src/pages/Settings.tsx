@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useReady } from '../data/store';
 import { useAuth } from '../auth/AuthContext';
 import { Card, CardHeader } from '../components/ui';
@@ -32,6 +33,10 @@ export default function Settings() {
             <dt className="text-muted">Alerts / cases</dt><dd>{alerts.length} / {cases.length}</dd>
             <dt className="text-muted">Employees / customers</dt><dd>{core.employees.length} / {core.customers.length}</dd>
           </dl>
+        </Card>
+        <Card>
+          <CardHeader title="Scripted demo" />
+          <p className="px-4 pb-4 text-xs">Keyboard-driven walkthrough for recording: Space play/pause, ←/→ previous/next, R restart, Esc exit. <Link to="/demo" className="text-primary underline">Start the demo</Link> (add <code>?hide=1</code> to hide the controller).</p>
         </Card>
         <Card>
           <CardHeader title="Signed in as" />

@@ -24,7 +24,7 @@ export function toElements(s: ScenarioT): ElementDefinition[] {
     out.push({
       group: 'nodes',
       data: { id: n.id, kind: n.kind, name: n.label, label: second ? `${n.label}\n${second}` : n.label },
-      position: { x: n.x, y: n.y },
+      position: { x: n.x * 1.7, y: n.y }, // x is stretched: the canvas is much wider than tall
       classes: n.kind,
     });
   }
