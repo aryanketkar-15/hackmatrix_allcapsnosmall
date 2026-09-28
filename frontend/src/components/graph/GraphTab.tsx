@@ -36,6 +36,7 @@ export function GraphTab({ alert, scenario }: { alert: AlertT; scenario: Scenari
         layout={layout}
         selection={state.selection}
         onSelect={(s) => dispatch({ type: 'SELECT', selection: s })}
+        mutedTxnIds={scenario.timeline.filter((e) => e.txnId && state.overlay.includes(e.id)).map((e) => e.txnId!)}
       />
       <p className="mt-2 text-xs text-muted">
         {cycle ? 'Red edges form a time-respecting loop. ' : ''}

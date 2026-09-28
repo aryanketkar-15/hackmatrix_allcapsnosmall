@@ -5,6 +5,7 @@ import { GraphTab } from '../graph/GraphTab';
 import { TimelineTab } from '../timeline/TimelineTab';
 import { EmployeeTab } from '../employee/EmployeeTab';
 import { EvidenceTab } from '../evidence/EvidenceTab';
+import { ButForTab } from '../replay/ButForTab';
 
 export interface TabViewProps { alert: AlertT; scenario: ScenarioT | null }
 
@@ -18,6 +19,6 @@ export const TAB_VIEWS: Record<Exclude<AlertTabId, 'overview'>, ComponentType<Ta
   timeline: TimelineTab,
   employee: EmployeeTab,
   evidence: EvidenceTab,
-  'but-for': () => <Pending label="But-for Analysis" />,
+  'but-for': ButForTab,
   notes: () => <Pending label="Notes" />,
 };
