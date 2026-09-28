@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import Alerts from './pages/Alerts';
 import AlertDetail from './pages/AlertDetail';
 import Cases from './pages/Cases';
+import Customers from './pages/Customers';
+import CustomerProfile from './pages/CustomerProfile';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -23,8 +25,8 @@ export const appRoutes: RouteObject[] = [
       { path: '/alerts', element: <Alerts /> },
       { path: '/alerts/:id/:tab?', element: <AlertDetail /> },
       { path: '/cases', element: <Cases /> },
-      { path: '/customers', element: <Placeholder title="Customers" /> },
-      { path: '/customers/:id/:tab?', element: <Placeholder title="Customer" /> },
+      { path: '/customers', element: <Customers /> },
+      { path: '/customers/:id/:tab?', element: <CustomerProfile /> },
       { path: '/analytics', element: <Placeholder title="Analytics" /> },
       { path: '/reports', element: <Placeholder title="Reports" /> },
       { path: '/transactions', element: <Placeholder title="Transactions" /> },
