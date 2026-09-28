@@ -11,6 +11,7 @@ import Cases from './pages/Cases';
 import Customers from './pages/Customers';
 import CustomerProfile from './pages/CustomerProfile';
 import Analytics from './pages/Analytics';
+import Reports from './pages/Reports';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -29,7 +30,7 @@ export const appRoutes: RouteObject[] = [
       { path: '/customers', element: <Customers /> },
       { path: '/customers/:id/:tab?', element: <CustomerProfile /> },
       { path: '/analytics', element: <Analytics /> },
-      { path: '/reports', element: <Placeholder title="Reports" /> },
+      { path: '/reports', element: <Reports /> },
       { path: '/transactions', element: <Placeholder title="Transactions" /> },
       { path: '/employees', element: <Placeholder title="Employees" /> },
       { path: '/employees/:id', element: <Placeholder title="Employee" /> },

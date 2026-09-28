@@ -5,7 +5,7 @@ import type { Selection } from '../../data/store';
 import { GRAPH_STYLE } from './graphStyles';
 import { hasPositions, layoutOptions, toElements, type GraphLayoutName } from './toElements';
 
-export interface MoneyGraphHandle { zoomBy: (f: number) => void; fit: () => void; container: () => HTMLDivElement | null }
+export interface MoneyGraphHandle { zoomBy: (f: number) => void; fit: () => void; container: () => HTMLDivElement | null; png: () => string | undefined }
 
 interface Props {
   scenario: ScenarioT;
@@ -30,6 +30,7 @@ export const MoneyGraph = forwardRef<MoneyGraphHandle, Props>(function MoneyGrap
     zoomBy: (f) => { const cy = cyRef.current; if (cy) cy.zoom({ level: cy.zoom() * f, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } }); },
     fit: () => cyRef.current?.fit(undefined, 40),
     container: () => el.current,
+    png: () => cyRef.current?.png({ output: 'base64uri', full: true, scale: 1.5, bg: '#ffffff' }),
   }));
 
   // create / destroy the instance per scenario
