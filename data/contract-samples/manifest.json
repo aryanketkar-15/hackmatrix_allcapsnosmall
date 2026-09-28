@@ -1,0 +1,62 @@
+[
+  {
+    "file": "valid_alert.json",
+    "schema": "Alert",
+    "valid": true
+  },
+  {
+    "file": "invalid_alert_level.json",
+    "schema": "Alert",
+    "valid": false
+  },
+  {
+    "file": "invalid_alert_risk_score.json",
+    "schema": "Alert",
+    "valid": false
+  },
+  {
+    "file": "invalid_alert_empty_reasons.json",
+    "schema": "Alert",
+    "valid": false
+  },
+  {
+    "file": "invalid_alert_bad_id.json",
+    "schema": "Alert",
+    "valid": false
+  },
+  {
+    "file": "valid_case.json",
+    "schema": "Case",
+    "valid": true
+  },
+  {
+    "file": "invalid_case_empty_rationale.json",
+    "schema": "Case",
+    "valid": false
+  },
+  {
+    "file": "valid_customer.json",
+    "schema": "Customer",
+    "valid": true
+  },
+  {
+    "file": "invalid_customer_unmasked_phone.json",
+    "schema": "Customer",
+    "valid": false
+  },
+  {
+    "file": "valid_metrics_pending.json",
+    "schema": "MetricsFile",
+    "valid": true
+  },
+  {
+    "file": "invalid_metrics_pending_with_values.json",
+    "schema": "MetricsFile",
+    "valid": false
+  },
+  {
+    "file": "valid_metrics_measured.json",
+    "schema": "MetricsFile",
+    "valid": true
+  }
+]

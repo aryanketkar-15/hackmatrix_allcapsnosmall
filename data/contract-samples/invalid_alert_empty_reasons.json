@@ -1,0 +1,53 @@
+{
+  "id": "ALT-2024-001",
+  "title": "Circular transfer with employee link",
+  "level": "HIGH",
+  "type": "CIRCULAR_TRANSFER",
+  "status": "INVESTIGATING",
+  "createdAt": "2024-04-30T10:50:00+05:30",
+  "closedAt": null,
+  "assignedTo": "Priya Sharma",
+  "summary": "Circular money movement following employee-enabled contact change.",
+  "reasons": [],
+  "riskIndicators": [
+    {
+      "text": "Employee changed mobile number",
+      "severity": "high"
+    }
+  ],
+  "evidenceConfidence": "HIGH",
+  "detailLevel": "FULL",
+  "scenarioId": "S1",
+  "entityRefs": {
+    "accountIds": [
+      "A-001"
+    ],
+    "employeeIds": [
+      "E17"
+    ],
+    "customerIds": [
+      "C001"
+    ],
+    "beneficiaryIds": [
+      "X-901"
+    ]
+  },
+  "listFacts": {
+    "amountAtRisk": 2980000,
+    "accountsCount": 3,
+    "employeesCount": 2,
+    "customersCount": 1,
+    "beneficiariesCount": 2,
+    "transactionsCount": 7,
+    "firstTxnAt": "2024-04-30T09:12:00+05:30",
+    "lastTxnAt": "2024-04-30T10:45:00+05:30"
+  },
+  "evidenceSummary": [
+    {
+      "key": "customer-request",
+      "label": "Customer Request",
+      "status": "NOT_FOUND",
+      "detail": "No customer request found"
+    }
+  ]
+}

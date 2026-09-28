@@ -1,0 +1,23 @@
+{
+  "status": "PENDING_EVALUATION",
+  "definitions": [
+    {
+      "id": "M1",
+      "name": "Detection accuracy",
+      "description": "x"
+    }
+  ],
+  "baselines": [
+    {
+      "id": "B0",
+      "name": "Time-window linking",
+      "description": "x"
+    }
+  ],
+  "ablations": [
+    {
+      "id": "AB1",
+      "name": "+ versioned dependency"
+    }
+  ]
+}

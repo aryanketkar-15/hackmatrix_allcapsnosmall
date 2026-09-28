@@ -1,0 +1,15 @@
+{
+  "id": "CASE-001",
+  "alertId": "ALT-2024-001",
+  "title": "Circular transfer investigation",
+  "priority": "High",
+  "status": "DECIDED",
+  "assignedTo": "Priya Sharma",
+  "createdAt": "2024-04-30T11:00:00+05:30",
+  "decision": {
+    "type": "FALSE_POSITIVE",
+    "rationale": "",
+    "at": "2024-04-30T12:00:00+05:30",
+    "by": "Priya Sharma"
+  }
+}

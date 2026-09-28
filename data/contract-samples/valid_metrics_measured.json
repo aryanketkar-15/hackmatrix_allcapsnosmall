@@ -1,0 +1,26 @@
+{
+  "status": "MEASURED",
+  "definitions": [
+    {
+      "id": "M1",
+      "name": "Detection accuracy",
+      "description": "x"
+    }
+  ],
+  "baselines": [
+    {
+      "id": "B0",
+      "name": "Time-window linking",
+      "description": "x"
+    }
+  ],
+  "ablations": [
+    {
+      "id": "AB1",
+      "name": "+ versioned dependency"
+    }
+  ],
+  "values": {
+    "M1": 0.9
+  }
+}
