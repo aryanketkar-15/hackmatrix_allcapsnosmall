@@ -214,11 +214,11 @@ def check_twins(yamls: list[dict]) -> None:
 
 
 def derive_facts(d: dict, accounts_by_type: dict | None = None) -> dict:
-    """Same derivation the frontend uses (deriveAlertFacts). Amount at risk = executed outbound value from victim accounts."""
+    """Same derivation the frontend uses (deriveAlertFacts). Amount at risk = outbound value (executed or attempted) from victim accounts."""
     victims = set(d["victimAccountIds"])
     at_risk = sum(
         t["amount"] for t in d["transactions"]
-        if t["outcome"] == "EXECUTED" and t["from"] in victims and t["kind"] in ("TRANSFER", "PAYROLL", "SWEEP")
+        if t["from"] in victims and t["kind"] in ("TRANSFER", "PAYROLL", "SWEEP")
     )
     times = sorted(t["at"] for t in d["transactions"])
     return {

@@ -1,0 +1,206 @@
+{
+ "id": "S3T",
+ "alertId": "ALT-2024-008",
+ "kind": "TWIN",
+ "twinOf": "S3",
+ "level": "INFO",
+ "title": "Large inflow explained by a documented property sale",
+ "customerId": "C006",
+ "victimAccountIds": [
+  "A-006"
+ ],
+ "nodes": [
+  {
+   "id": "C006",
+   "kind": "customer",
+   "label": "Customer C006",
+   "sub": "Salaried",
+   "x": 110,
+   "y": 150
+  },
+  {
+   "id": "A-006",
+   "kind": "account",
+   "label": "A",
+   "sub": "A-006",
+   "balance": 2700000,
+   "x": 430,
+   "y": 220
+  },
+  {
+   "id": "X-601",
+   "kind": "beneficiary",
+   "label": "Buyer",
+   "sub": "X-601",
+   "x": 760,
+   "y": 90
+  },
+  {
+   "id": "X-602",
+   "kind": "beneficiary",
+   "label": "Housing lender",
+   "sub": "X-602",
+   "x": 780,
+   "y": 360
+  }
+ ],
+ "transactions": [
+  {
+   "id": "T1",
+   "from": "X-601",
+   "to": "A-006",
+   "amount": 4200000,
+   "at": "2024-04-09T10:30:00+05:30",
+   "kind": "DEPOSIT",
+   "outcome": "EXECUTED",
+   "cycle": false
+  },
+  {
+   "id": "T2",
+   "from": "A-006",
+   "to": "X-602",
+   "amount": 1500000,
+   "at": "2024-04-09T13:45:00+05:30",
+   "kind": "TRANSFER",
+   "outcome": "EXECUTED",
+   "cycle": false
+  }
+ ],
+ "timeline": [
+  {
+   "id": "ev-deed",
+   "at": "2024-04-02T12:00:00+05:30",
+   "category": "CONTROL_CHECK",
+   "title": "Sale deed registered",
+   "detail": "Registered sale deed logged in the document store (independent source)."
+  },
+  {
+   "id": "ev-t1",
+   "at": "2024-04-09T10:30:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Inflow from buyer",
+   "detail": "₹42,00,000 · X-601 → A-006",
+   "txnId": "T1"
+  },
+  {
+   "id": "ev-t2",
+   "at": "2024-04-09T13:45:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Home-loan closure payment",
+   "detail": "₹15,00,000 · A-006 → X-602",
+   "txnId": "T2"
+  },
+  {
+   "id": "ev-explained",
+   "at": "2024-04-09T15:00:00+05:30",
+   "category": "CONTROL_CHECK",
+   "title": "Explanation check passed",
+   "detail": "Sale deed and loan-closure letter pre-date the activity; no profile edit found."
+  }
+ ],
+ "controls": [
+  {
+   "id": "ctl-explain",
+   "name": "Explanation check",
+   "outcome": "PASS",
+   "integrity": "GENUINE",
+   "reason": "Independent, pre-dated evidence found: registered sale deed and closure letter",
+   "writerEventId": "ev-deed",
+   "writerGrade": "A"
+  }
+ ],
+ "evidenceSummary": [
+  {
+   "key": "customer-request",
+   "label": "Customer Request",
+   "status": "FOUND",
+   "detail": "Sale deed and loan-closure letter on file."
+  },
+  {
+   "key": "employee-authorization",
+   "label": "Employee Authorization",
+   "status": "FOUND",
+   "detail": "No employee action on the profile in the lookback window."
+  },
+  {
+   "key": "mfa-verification",
+   "label": "MFA Verification",
+   "status": "AVAILABLE",
+   "detail": "OTP delivered to the customer's registered number."
+  },
+  {
+   "key": "system-logs",
+   "label": "System Logs",
+   "status": "AVAILABLE",
+   "detail": "All required logs retrieved."
+  },
+  {
+   "key": "video-evidence",
+   "label": "Video Evidence",
+   "status": "NOT_AVAILABLE",
+   "detail": "Not applicable for a digital-channel payment."
+  }
+ ],
+ "documents": [
+  {
+   "id": "d1",
+   "name": "system_logs_20240409.json",
+   "kind": "JSON",
+   "generator": "system_logs"
+  },
+  {
+   "id": "d2",
+   "name": "explanation_evidence.txt",
+   "kind": "TXT",
+   "generator": "auth_records"
+  }
+ ],
+ "connections": [],
+ "pathSteps": [
+  {
+   "key": "explanation",
+   "label": "Business explanation",
+   "detail": "Documents that explain the inflows.",
+   "artifact": "Registered sale deed dated 2 April pre-dates the inflow",
+   "grade": "A",
+   "integrity": "GENUINE"
+  },
+  {
+   "key": "profile",
+   "label": "Profile edit",
+   "detail": "Declared income band.",
+   "artifact": "No edit in the lookback window",
+   "grade": null,
+   "integrity": "GENUINE"
+  },
+  {
+   "key": "inflows",
+   "label": "Inflows",
+   "detail": "Deposits into the account.",
+   "artifact": "One deposit from the registered buyer",
+   "grade": null,
+   "integrity": "GENUINE"
+  },
+  {
+   "key": "outflows",
+   "label": "Outward transfers",
+   "detail": "Funds leave the account.",
+   "artifact": "One payment matching the loan-closure letter",
+   "grade": null,
+   "integrity": "GENUINE"
+  }
+ ],
+ "insiders": [],
+ "replay": null,
+ "reach": [],
+ "employeeIds": [],
+ "beneficiaryIds": [
+  "X-601",
+  "X-602"
+ ],
+ "customerIds": [
+  "C006"
+ ],
+ "explanation": "Registered sale deed (dated 2 April, pre-dates the inflow) and a home-loan closure letter explain the inflow and the outward payment.",
+ "divergenceNote": null
+}

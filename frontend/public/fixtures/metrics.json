@@ -1,0 +1,120 @@
+{
+ "status": "PENDING_EVALUATION",
+ "definitions": [
+  {
+   "id": "M01",
+   "name": "Detection accuracy (precision / recall / F1)",
+   "description": "Scenario-level true/false positives and negatives per pattern (circular transfers, splitting, profile mismatch) and variant."
+  },
+  {
+   "id": "M02",
+   "name": "False-positive rate on legitimate twins",
+   "description": "Legitimate look-alike twins raised as High or Medium ÷ total twins."
+  },
+  {
+   "id": "M03",
+   "name": "False-positive rate on all legitimate scenarios",
+   "description": "Legitimate scenarios that alert ÷ total legitimate scenarios."
+  },
+  {
+   "id": "M04",
+   "name": "Alerts per 10,000 transactions",
+   "description": "Operational alert load."
+  },
+  {
+   "id": "M05",
+   "name": "Connection accuracy",
+   "description": "Correct (type, credential) connections ÷ ground-truth connections."
+  },
+  {
+   "id": "M06",
+   "name": "Privilege-signal precision",
+   "description": "Correct P1–P10 signals ÷ emitted signals."
+  },
+  {
+   "id": "M07",
+   "name": "But-for label accuracy",
+   "description": "Correct dependency roles ÷ candidates, split by simple, overdetermined and cascade cases."
+  },
+  {
+   "id": "M08",
+   "name": "Provenance precision / recall",
+   "description": "Cited true enablers ÷ cited; cited true enablers ÷ all true enablers."
+  },
+  {
+   "id": "M09",
+   "name": "Hollow-flag precision / recall",
+   "description": "Control-integrity flags versus ground-truth tainted inputs."
+  },
+  {
+   "id": "M10",
+   "name": "Reach exposure recall",
+   "description": "Hidden primed accounts found before any transfer ÷ hidden primed accounts."
+  },
+  {
+   "id": "M11",
+   "name": "Abstention correctness",
+   "description": "Inconclusive alerts on data-gap scenarios ÷ data-gap scenarios; wrongful abstentions on complete data."
+  },
+  {
+   "id": "M12",
+   "name": "Evidence completeness",
+   "description": "Alerts with at least one raw event per evidence dimension ÷ alerts."
+  },
+  {
+   "id": "M13",
+   "name": "Processing latency",
+   "description": "Wall-clock per event batch and per but-for replay."
+  },
+  {
+   "id": "M14",
+   "name": "Reproducibility",
+   "description": "Identical outputs across repeated seeded runs."
+  }
+ ],
+ "baselines": [
+  {
+   "id": "B0",
+   "name": "Naive time-window linking",
+   "description": "Links any employee action on an account within a window before a suspicious transaction."
+  },
+  {
+   "id": "B1",
+   "name": "Transaction-only rules",
+   "description": "Standard cycles, splitting and mismatch with thresholds and no explanation check."
+  },
+  {
+   "id": "B2",
+   "name": "B1 + explanation check",
+   "description": "Business-context-aware monitoring."
+  },
+  {
+   "id": "B3",
+   "name": "B2 + unlinked employee anomaly",
+   "description": "Flags unusual employees separately (separate-teams status quo)."
+  },
+  {
+   "id": "B4",
+   "name": "Supervised gradient-boosted trees on transaction features",
+   "description": "Standard ML baseline evaluated on held-out scenario families."
+  }
+ ],
+ "ablations": [
+  {
+   "id": "AB1",
+   "name": "+ versioned dependency"
+  },
+  {
+   "id": "AB2",
+   "name": "+ authorization grading / Hollow Pass"
+  },
+  {
+   "id": "AB3",
+   "name": "+ but-for replay"
+  },
+  {
+   "id": "AB4",
+   "name": "+ evidence confidence and abstention"
+  }
+ ]
+}

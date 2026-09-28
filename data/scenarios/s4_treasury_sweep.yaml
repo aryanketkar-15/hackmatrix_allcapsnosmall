@@ -1,0 +1,82 @@
+# S4 - Treasury-sweep loop with group code + mandate: looks like a circular transfer, explained.
+id: S4
+kind: SWEEP
+twinOf: null
+level: INFO
+title: Treasury sweep loop explained by group mandate
+customerId: C007
+victimAccountIds: [A-007]
+employeeIds: []
+beneficiaryIds: []
+customerIds: [C007]
+explanation: "Group code GRP-118 and standing sweep mandate M-2024-044 pre-date the loop; the same sweep runs daily."
+divergenceNote: null
+
+alert:
+  id: ALT-2024-004
+  title: Treasury sweep loop explained by group mandate
+  type: CIRCULAR_TRANSFER
+  status: CLOSED
+  createdAt: "2024-04-26 18:20"
+  closedAt: "2024-04-27 09:30"
+  assignedTo: Priya Sharma
+  evidenceConfidence: HIGH
+  summary: >-
+    A three-account loop A → B → C → A of about ₹50,00,000 closed within an hour. Explained by a standing group sweep
+    mandate that pre-dates the pattern; no insider connection found.
+  reasons:
+    - Loop of three accounts closes within the fast window
+    - Group code GRP-118 and sweep mandate M-2024-044 pre-date the pattern and come from an independent source
+    - Recurrence found on every business day of the past month; economic outflow is nil
+  riskIndicators:
+    - {text: Circular transfer pattern detected, severity: medium}
+
+customer:
+  id: C007
+  name: Apex Agro Holdings Ltd
+  occupation: Agri-commodity group treasury
+  age: 0
+  annualIncome: 420000000
+  location: Pune
+  type: Business
+
+nodes:
+  - {id: C007, kind: customer, label: Customer C007, sub: Group treasury, x: 110, y: 240}
+  - {id: A-007, kind: account, label: A, sub: A-007 · Parent, balance: 100000, x: 430, y: 90}
+  - {id: A-008, kind: account, label: B, sub: A-008 · Subsidiary 1, balance: 500000, x: 720, y: 300}
+  - {id: A-009, kind: account, label: C, sub: A-009 · Subsidiary 2, balance: 500000, x: 430, y: 420}
+
+transactions:
+  - {id: T1, from: A-007, to: A-008, amount: 5000000, at: "2024-04-26 17:00", kind: SWEEP, outcome: EXECUTED, cycle: true}
+  - {id: T2, from: A-008, to: A-009, amount: 4950000, at: "2024-04-26 17:20", kind: SWEEP, outcome: EXECUTED, cycle: true}
+  - {id: T3, from: A-009, to: A-007, amount: 4900000, at: "2024-04-26 17:45", kind: SWEEP, outcome: EXECUTED, cycle: true}
+
+timeline:
+  - {id: ev-mandate, at: "2024-02-01 10:00", category: CONTROL_CHECK, title: Group sweep mandate registered, detail: "Mandate M-2024-044 under group code GRP-118 registered by the group's authorised signatories."}
+  - {id: ev-t1, at: "2024-04-26 17:00", category: TRANSACTION, title: Sweep parent → subsidiary 1, detail: "₹50,00,000 · A-007 → A-008", txnId: T1}
+  - {id: ev-t2, at: "2024-04-26 17:20", category: TRANSACTION, title: Sweep subsidiary 1 → subsidiary 2, detail: "₹49,50,000 · A-008 → A-009", txnId: T2}
+  - {id: ev-t3, at: "2024-04-26 17:45", category: TRANSACTION, title: Sweep returns to parent, detail: "₹49,00,000 · A-009 → A-007 (loop closes)", txnId: T3}
+  - {id: ev-explained, at: "2024-04-26 18:20", category: CONTROL_CHECK, title: Explanation check passed, detail: Group code and mandate pre-date the pattern; recurrence found daily; no economic outflow.}
+
+controls:
+  - {id: ctl-explain, name: Explanation check, outcome: PASS, integrity: GENUINE, reason: "Independent, pre-dated evidence found: group code GRP-118 and sweep mandate M-2024-044", writerEventId: ev-mandate, writerGrade: A}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: FOUND, detail: Sweep mandate M-2024-044 on file.}
+  - {key: employee-authorization, label: Employee Authorization, status: FOUND, detail: No employee action on the accounts in the lookback window.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: Sweeps run under the standing mandate.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Not applicable for scheduled sweeps.}
+
+documents:
+  - {id: d1, name: system_logs_20240426.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: sweep_mandate_records.txt, kind: TXT, generator: auth_records}
+
+pathSteps:
+  - {key: explanation, label: Business explanation, detail: "Mandate, group code or recurrence.", artifact: Group code GRP-118 and mandate M-2024-044 pre-date the loop, grade: A, integrity: GENUINE}
+  - {key: transfers, label: Transfers, detail: Loop of sweeps., artifact: Three sweeps close a loop under the mandate, grade: null, integrity: GENUINE}
+
+connections: []
+insiders: []
+replay: null
+reach: []

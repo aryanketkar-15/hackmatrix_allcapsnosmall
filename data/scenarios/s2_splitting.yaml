@@ -1,0 +1,140 @@
+# S2 - Transaction splitting after two employee limit raises (redundant enablers -> jointly necessary pair).
+# Scenario parameters, not measured results.
+id: S2
+kind: ATTACK
+twinOf: null
+level: HIGH
+title: Transaction structuring after employee limit raise
+customerId: C003
+victimAccountIds: [A-003]
+employeeIds: [E14, E05]
+beneficiaryIds: [X-301, X-302, X-303]
+customerIds: [C003]
+explanation: null
+divergenceNote: >-
+  No mandate, group code or recurrence pre-dates the transfers, and the limit was raised by two credentials with no
+  customer request. The payout-batch twin has a standing mandate that pre-dates the batch.
+
+alert:
+  id: ALT-2024-002
+  title: Transaction structuring after employee limit raise
+  type: STRUCTURING
+  status: INVESTIGATING
+  createdAt: "2024-04-22 16:10"
+  assignedTo: Amit Singh
+  evidenceConfidence: MEDIUM
+  summary: >-
+    Five transfers just below the ₹10,00,000 threshold within a few hours, following two staff-made transaction-limit
+    increases on the same account. Total ₹48,00,000 across three beneficiaries.
+  reasons:
+    - Five transfers between ₹9,40,000 and ₹9,80,000 within 90 minutes, each just below the ₹10,00,000 threshold
+    - Per-transaction and daily limits were raised by two different credentials without a customer request
+    - No mandate, group code or recurrence explains the pattern
+  riskIndicators:
+    - {text: Amounts clustered just below the reporting threshold, severity: high}
+    - {text: Limits raised by staff without customer request, severity: high}
+    - {text: Second approval recorded within 4 seconds, severity: medium}
+    - {text: Transfer alerts switched off before the transfers, severity: medium}
+
+customer:
+  id: C003
+  name: Meera Kulkarni
+  occupation: Trader
+  age: 44
+  annualIncome: 2400000
+  location: Nashik
+
+nodes:
+  - {id: C003, kind: customer, label: Customer C003, sub: Regular Customer, x: 110, y: 70}
+  - {id: E14, kind: employee, label: Employee E14, sub: Branch Staff, x: 110, y: 250}
+  - {id: E05, kind: employee, label: Employee E05, sub: Branch Staff, x: 110, y: 420}
+  - {id: A-003, kind: account, label: A, sub: A-003, balance: 380000, x: 430, y: 240,}
+  - {id: X-301, kind: beneficiary, label: Beneficiary 1, sub: X-301 · External, x: 780, y: 80}
+  - {id: X-302, kind: beneficiary, label: Beneficiary 2, sub: X-302 · External, x: 800, y: 240}
+  - {id: X-303, kind: beneficiary, label: Beneficiary 3, sub: X-303 · External, x: 780, y: 400}
+
+transactions:
+  - {id: T1, from: A-003, to: X-301, amount: 960000, at: "2024-04-22 14:05", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T2, from: A-003, to: X-302, amount: 980000, at: "2024-04-22 14:20", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T3, from: A-003, to: X-303, amount: 940000, at: "2024-04-22 14:41", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T4, from: A-003, to: X-301, amount: 970000, at: "2024-04-22 15:05", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T5, from: A-003, to: X-302, amount: 950000, at: "2024-04-22 15:30", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+
+timeline:
+  - {id: ev-login14, at: "2024-04-22 09:22", category: EMPLOYEE_ACTIVITY, title: Employee E14 logged in, detail: "Branch Terminal · IP: 10.1.4.7", actorId: E14}
+  - {id: ev-raise-a, at: "2024-04-22 09:30", category: ACCOUNT_STATE_CHANGE, title: Per-transaction limit raised, detail: "₹2,00,000 → ₹10,00,000 · Account A-003 · no customer request on file", actorId: E14}
+  - {id: ev-raise-b, at: "2024-04-22 09:41", category: ACCOUNT_STATE_CHANGE, title: Daily limit raised, detail: "₹5,00,000 → ₹50,00,000 · Account A-003 · separate change by a second credential", actorId: E05}
+  - {id: ev-approve, at: "2024-04-22 09:42", category: CONTROL_CHECK, title: Approval recorded in 4 seconds, detail: "E05 approved the earlier change with a 4-second latency; no independent review recorded.", actorId: E05}
+  - {id: ev-alerts-off, at: "2024-04-22 09:50", category: ACCOUNT_STATE_CHANGE, title: Transfer SMS alerts disabled, detail: "Alert preference for A-003 switched off by E14 · no customer request", actorId: E14}
+  - {id: ev-t1, at: "2024-04-22 14:05", category: TRANSACTION, title: Transfer to beneficiary 1, detail: "₹9,60,000 · A-003 → X-301", txnId: T1}
+  - {id: ev-t2, at: "2024-04-22 14:20", category: TRANSACTION, title: Transfer to beneficiary 2, detail: "₹9,80,000 · A-003 → X-302", txnId: T2}
+  - {id: ev-t3, at: "2024-04-22 14:41", category: TRANSACTION, title: Transfer to beneficiary 3, detail: "₹9,40,000 · A-003 → X-303", txnId: T3}
+  - {id: ev-t4, at: "2024-04-22 15:05", category: TRANSACTION, title: Transfer to beneficiary 1, detail: "₹9,70,000 · A-003 → X-301", txnId: T4}
+  - {id: ev-t5, at: "2024-04-22 15:30", category: TRANSACTION, title: Transfer to beneficiary 2, detail: "₹9,50,000 · A-003 → X-302", txnId: T5}
+
+controls:
+  - {id: ctl-limit, name: Transaction and daily limit, outcome: PASS, integrity: HOLLOW, reason: Limits read at execution had been raised by staff without a customer request (Grade X), writerEventId: ev-raise-a, writerGrade: X}
+  - {id: ctl-mfa, name: MFA (one-time password), outcome: PASS, integrity: GENUINE, reason: OTP delivered to the customer's unchanged registered number, writerEventId: null, writerGrade: null}
+  - {id: ctl-notify, name: Customer alert on transfer, outcome: PASS, integrity: HOLLOW, reason: Alert preference had been switched off by E14 so no message was sent, writerEventId: ev-alerts-off, writerGrade: X}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: NOT_FOUND, detail: No customer request for the limit increases.}
+  - {key: employee-authorization, label: Employee Authorization, status: MISSING, detail: Second approval recorded in 4 seconds; no independent review.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: OTP delivered to the customer's registered number.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Branch CCTV not configured for this terminal.}
+
+documents:
+  - {id: d1, name: system_logs_20240422.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: login_logs_e14.csv, kind: CSV, generator: login_logs}
+  - {id: d3, name: account_state_a003.json, kind: JSON, generator: account_state}
+  - {id: d4, name: approval_records.txt, kind: TXT, generator: auth_records}
+
+connections:
+  - {credential: E14, type: STATE_DEPENDENCY, strength: STRONGEST, targetNodeId: A-003, evidence: "limit version raised by E14 was consumed by transactions T1-T5"}
+  - {credential: E05, type: APPROVAL, strength: STRONG, targetNodeId: A-003, evidence: "second limit raise and approval within 4 seconds"}
+
+pathSteps:
+  - {key: explanation, label: Business explanation, detail: "Mandate, group code or recurrence.", artifact: "None: no mandate, group code or recurrence on file", grade: E, integrity: HOLLOW}
+  - {key: limit, label: Limit change, detail: Per-transaction and daily limits., artifact: Raised by two credentials with no customer request, grade: X, integrity: HOLLOW}
+  - {key: approval, label: Approval, detail: Checker review., artifact: Approved in 4 seconds by a colleague, grade: D, integrity: HOLLOW}
+  - {key: transfers, label: Transfers, detail: Outbound payments., artifact: "Five transfers just below ₹10,00,000 to three beneficiaries", grade: null, integrity: HOLLOW}
+
+insiders:
+  - employeeId: E14
+    signals: [P2, P4, P7]
+    attribution: HIGH
+    attributionNote: "Session, terminal and attendance data are consistent; 5 staff hold the same permission."
+    staffWithSamePermission: 5
+    credentialMisuseIndicators: false
+    attendanceAvailable: true
+    actions:
+      - {at: "2024-04-22 09:30", action: Raised per-transaction limit, account: A-003, permitted: true, inPortfolio: false, evidenceGrade: X}
+      - {at: "2024-04-22 09:50", action: Disabled transfer alerts, account: A-003, permitted: true, inPortfolio: false, evidenceGrade: X}
+  - employeeId: E05
+    signals: [P5, P6]
+    attribution: MEDIUM
+    attributionNote: "Maker-checker pair E14 → E05 shows a high pair lift; 9 staff hold the same permission."
+    staffWithSamePermission: 9
+    credentialMisuseIndicators: false
+    attendanceAvailable: true
+    actions:
+      - {at: "2024-04-22 09:41", action: Raised daily limit, account: A-003, permitted: true, inPortfolio: false, evidenceGrade: X}
+      - {at: "2024-04-22 09:42", action: Approved limit change (4 s), account: A-003, permitted: true, inPortfolio: false, evidenceGrade: D}
+
+replay:
+  targetLabel: "Transfers T1-T5 from A-003 (₹48,00,000)"
+  candidates:
+    - {id: c-raise-a, label: Per-transaction limit raise (E14), eventId: ev-raise-a, declaredRole: null, dependents: []}
+    - {id: c-raise-b, label: Daily limit raise (E05), eventId: ev-raise-b, declaredRole: null, dependents: [ev-approve]}
+    - {id: c-alerts, label: Transfer alerts disabled (E14), eventId: ev-alerts-off, declaredRole: CONCEALING, dependents: []}
+  disablingSets: [[c-raise-a, c-raise-b]]
+  coverage: {modelled: 3, applicable: 3, status: FULL}
+  pathEventIds: [ev-t1, ev-t2, ev-t3, ev-t4, ev-t5]
+  steps:
+    - {title: Original transaction path is executed, detail: All control conditions satisfied.}
+    - {title: Remove one limit raise, detail: The other raise still allows the transfers (redundant enablers); the path still executes.}
+    - {title: Remove both limit raises, detail: Transfers above the standing limit are declined.}
+    - {title: Conclusion, detail: The two raises are jointly necessary; either alone is sufficient to enable the path.}
+
+reach: []

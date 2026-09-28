@@ -110,3 +110,69 @@ def test_alert_before_last_transaction_rejected():
     y["alert"]["createdAt"] = "2024-04-30 09:12"
     with pytest.raises(BuildError, match="createdAt"):
         build_scenario(y)
+
+
+# ---- M1.3: remaining scenarios + metrics ----
+def test_all_scenarios_present(built):
+    _, sc, _ = built
+    assert set(sc) == {"S1", "S1T", "S2", "S2T", "S3", "S3T", "S4", "S5", "S6"}
+
+
+def test_every_attack_has_a_twin(built):
+    ys, _, _ = built
+    twinned = {y["twinOf"] for y in ys.values() if y.get("twinOf")}
+    assert {"S1", "S2", "S3"} <= twinned
+
+
+def test_explained_scenarios_carry_explanation(built):
+    _, sc, _ = built
+    for sid in ("S2T", "S3T", "S4"):
+        assert sc[sid]["level"] == "INFO" and sc[sid]["explanation"]
+        assert any(c["name"] == "Explanation check" and c["outcome"] == "PASS" for c in sc[sid]["controls"])
+
+
+def test_s2_jointly_necessary_pair(built):
+    _, sc, _ = built
+    rp = sc["S2"]["replay"]
+    roles = {c["id"]: c["role"] for c in rp["candidates"]}
+    assert roles["c-raise-a"] == roles["c-raise-b"] == "JOINTLY_NECESSARY"
+    out = {tuple(v["removed"]): v["outcome"] for v in rp["variants"]}
+    assert out[("c-raise-a",)] == "PASS" and out[("c-raise-b",)] == "PASS"
+    assert out[("c-raise-a", "c-raise-b")] == "FAIL"
+
+
+def test_s3_profile_edit_link(built):
+    _, sc, _ = built
+    assert any(c["type"] == "PROFILE_EDIT" for c in sc["S3"]["connections"])
+    assert sc["S3"]["replay"]["candidates"][0]["role"] == "NECESSARY"
+
+
+def test_s5_data_gap_named(built):
+    _, sc, _ = built
+    s = sc["S5"]
+    assert s["level"] == "DATA_GAP"
+    assert any(e.get("gap") for e in s["timeline"])
+    missing = [i for i in s["evidenceSummary"] if i["status"] in ("MISSING", "NOT_FOUND", "NOT_AVAILABLE")]
+    assert len(missing) >= 3
+    assert any(c["integrity"] == "UNKNOWN" and c["writerGrade"] == "U" for c in s["controls"])
+
+
+def test_s6_control_held(built):
+    _, sc, _ = built
+    s = sc["S6"]
+    assert s["transactions"][0]["outcome"] == "BLOCKED"
+    assert any(c["outcome"] == "FAIL" and c["integrity"] == "GENUINE" for c in s["controls"])
+
+
+def test_metrics_pending_has_no_values():
+    from khoji_build import build_metrics
+    m = build_metrics()
+    assert m["status"] == "PENDING_EVALUATION" and "values" not in m
+    assert {b["id"] for b in m["baselines"]} == {"B0", "B1", "B2", "B3", "B4"}
+
+
+def test_attack_without_twin_rejected():
+    from khoji_build import check_twins, load_yaml_files
+    ys = [y for y in load_yaml_files() if y["id"] != "S3T"]
+    with pytest.raises(BuildError, match="S3"):
+        check_twins(ys)

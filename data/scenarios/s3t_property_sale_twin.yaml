@@ -1,0 +1,83 @@
+# S3-T - legitimate look-alike of S3: large inflow explained by a documented property sale.
+id: S3T
+kind: TWIN
+twinOf: S3
+level: INFO
+title: Large inflow explained by a documented property sale
+customerId: C006
+victimAccountIds: [A-006]
+employeeIds: []
+beneficiaryIds: [X-601, X-602]
+customerIds: [C006]
+explanation: "Registered sale deed (dated 2 April, pre-dates the inflow) and a home-loan closure letter explain the inflow and the outward payment."
+divergenceNote: null
+
+alert:
+  id: ALT-2024-008
+  title: Large inflow explained by a documented property sale
+  type: PROFILE_MISMATCH
+  status: CLOSED
+  createdAt: "2024-04-09 15:00"
+  closedAt: "2024-04-10 12:00"
+  assignedTo: Raj Mehta
+  evidenceConfidence: HIGH
+  summary: >-
+    A ₹42,00,000 inflow is far above the declared income. Explained by a registered property sale that pre-dates the
+    inflow; the outward payment is a documented home-loan closure. No profile edit or insider connection found.
+  reasons:
+    - Inflow ₹42,00,000 is far above the declared annual income
+    - Registered sale deed pre-dates the inflow and comes from an independent source
+    - Outward payment matches the home-loan closure letter
+  riskIndicators:
+    - {text: Inflow above the declared income, severity: medium}
+
+customer:
+  id: C006
+  name: Sunita Deshpande
+  occupation: Government employee
+  age: 52
+  annualIncome: 1400000
+  location: Nagpur
+  monthlyFlows: [[Nov, 62000, 58000], [Dec, 61000, 57000], [Jan, 63000, 59000], [Feb, 60000, 56000], [Mar, 64000, 60000], [Apr, 4260000, 1560000]]
+  explanation: {text: "Registered sale deed (2 April) and home-loan closure letter on file. Both pre-date the inflow and come from independent sources.", documents: [sale_deed_2024-04-02.pdf, loan_closure_letter.pdf]}
+
+nodes:
+  - {id: C006, kind: customer, label: Customer C006, sub: Salaried, x: 110, y: 150}
+  - {id: A-006, kind: account, label: A, sub: A-006, balance: 2700000, x: 430, y: 220}
+  - {id: X-601, kind: beneficiary, label: Buyer, sub: X-601, x: 760, y: 90}
+  - {id: X-602, kind: beneficiary, label: Housing lender, sub: X-602, x: 780, y: 360}
+
+transactions:
+  - {id: T1, from: X-601, to: A-006, amount: 4200000, at: "2024-04-09 10:30", kind: DEPOSIT, outcome: EXECUTED, cycle: false}
+  - {id: T2, from: A-006, to: X-602, amount: 1500000, at: "2024-04-09 13:45", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+
+timeline:
+  - {id: ev-deed, at: "2024-04-02 12:00", category: CONTROL_CHECK, title: Sale deed registered, detail: Registered sale deed logged in the document store (independent source).}
+  - {id: ev-t1, at: "2024-04-09 10:30", category: TRANSACTION, title: Inflow from buyer, detail: "₹42,00,000 · X-601 → A-006", txnId: T1}
+  - {id: ev-t2, at: "2024-04-09 13:45", category: TRANSACTION, title: Home-loan closure payment, detail: "₹15,00,000 · A-006 → X-602", txnId: T2}
+  - {id: ev-explained, at: "2024-04-09 15:00", category: CONTROL_CHECK, title: Explanation check passed, detail: Sale deed and loan-closure letter pre-date the activity; no profile edit found.}
+
+controls:
+  - {id: ctl-explain, name: Explanation check, outcome: PASS, integrity: GENUINE, reason: "Independent, pre-dated evidence found: registered sale deed and closure letter", writerEventId: ev-deed, writerGrade: A}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: FOUND, detail: Sale deed and loan-closure letter on file.}
+  - {key: employee-authorization, label: Employee Authorization, status: FOUND, detail: No employee action on the profile in the lookback window.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: OTP delivered to the customer's registered number.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Not applicable for a digital-channel payment.}
+
+documents:
+  - {id: d1, name: system_logs_20240409.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: explanation_evidence.txt, kind: TXT, generator: auth_records}
+
+pathSteps:
+  - {key: explanation, label: Business explanation, detail: Documents that explain the inflows., artifact: "Registered sale deed dated 2 April pre-dates the inflow", grade: A, integrity: GENUINE}
+  - {key: profile, label: Profile edit, detail: Declared income band., artifact: No edit in the lookback window, grade: null, integrity: GENUINE}
+  - {key: inflows, label: Inflows, detail: Deposits into the account., artifact: One deposit from the registered buyer, grade: null, integrity: GENUINE}
+  - {key: outflows, label: Outward transfers, detail: Funds leave the account., artifact: One payment matching the loan-closure letter, grade: null, integrity: GENUINE}
+
+connections: []
+insiders: []
+replay: null
+reach: []

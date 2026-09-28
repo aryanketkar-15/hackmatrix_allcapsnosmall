@@ -1,0 +1,129 @@
+# S3 - Profile mismatch hidden by an employee's income-band edit (PROFILE_EDIT link).
+id: S3
+kind: ATTACK
+twinOf: null
+level: HIGH
+title: Profile mismatch after employee income-band edit
+customerId: C005
+victimAccountIds: [A-005]
+employeeIds: [E11]
+beneficiaryIds: [X-501, X-502, X-503, X-504]
+customerIds: [C005]
+explanation: null
+divergenceNote: >-
+  The declared income band was raised by an employee shortly before the inflows, with no KYC refresh on file. The
+  legitimate twin has a documented property sale that pre-dates the inflows.
+
+alert:
+  id: ALT-2024-003
+  title: Profile mismatch after employee income-band edit
+  type: PROFILE_MISMATCH
+  status: ASSIGNED
+  createdAt: "2024-04-20 17:30"
+  assignedTo: Raj Mehta
+  evidenceConfidence: MEDIUM
+  summary: >-
+    Inflows of ₹18,00,000 in two days on a salaried customer's account, then two outward transfers. The declared income
+    band had been raised by a staff credential three days earlier, which brought the mismatch below the static threshold.
+  reasons:
+    - Observed monthly inflow is far above the declared income and breaks the account's history
+    - Declared income band was edited by credential E11 without a KYC refresh on file (Grade X)
+    - Inflow-then-outflow within hours (pass-through) to counterparties with no prior relationship
+  riskIndicators:
+    - {text: Inflows far above declared income, severity: high}
+    - {text: Profile edited by staff before the inflows, severity: high}
+    - {text: Pass-through of received funds, severity: medium}
+    - {text: New counterparties with no relationship history, severity: medium}
+
+customer:
+  id: C005
+  name: Ravi Menon
+  occupation: Salaried employee
+  age: 31
+  annualIncome: 4800000
+  location: Kochi
+  monthlyFlows: [[Nov, 38000, 34000], [Dec, 41000, 39000], [Jan, 36000, 33000], [Feb, 40000, 37000], [Mar, 39000, 36000], [Apr, 1800000, 1780000]]
+  profileEdit: {by: E11, at: "2024-04-17 11:12", field: Annual income band, alertId: ALT-2024-003}
+
+nodes:
+  - {id: C005, kind: customer, label: Customer C005, sub: Salaried, x: 110, y: 80}
+  - {id: E11, kind: employee, label: Employee E11, sub: Branch Staff, x: 110, y: 330}
+  - {id: A-005, kind: account, label: A, sub: A-005, balance: 20000, x: 430, y: 220}
+  - {id: X-501, kind: beneficiary, label: Counterparty 1, sub: X-501, x: 760, y: 40}
+  - {id: X-502, kind: beneficiary, label: Counterparty 2, sub: X-502, x: 800, y: 150}
+  - {id: X-503, kind: beneficiary, label: Counterparty 3, sub: X-503, x: 780, y: 270}
+  - {id: X-504, kind: beneficiary, label: Counterparty 4, sub: X-504 · exit, x: 780, y: 400}
+
+transactions:
+  - {id: T1, from: X-501, to: A-005, amount: 440000, at: "2024-04-19 10:05", kind: DEPOSIT, outcome: EXECUTED, cycle: false}
+  - {id: T2, from: X-502, to: A-005, amount: 460000, at: "2024-04-19 10:40", kind: DEPOSIT, outcome: EXECUTED, cycle: false}
+  - {id: T3, from: X-503, to: A-005, amount: 430000, at: "2024-04-19 15:15", kind: DEPOSIT, outcome: EXECUTED, cycle: false}
+  - {id: T4, from: X-501, to: A-005, amount: 470000, at: "2024-04-20 09:50", kind: DEPOSIT, outcome: EXECUTED, cycle: false}
+  - {id: T5, from: A-005, to: X-504, amount: 1000000, at: "2024-04-20 15:10", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T6, from: A-005, to: X-504, amount: 780000, at: "2024-04-20 16:00", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+
+timeline:
+  - {id: ev-login11, at: "2024-04-17 11:05", category: EMPLOYEE_ACTIVITY, title: Employee E11 logged in, detail: "Branch Terminal · IP: 10.1.6.2", actorId: E11}
+  - {id: ev-profile-edit, at: "2024-04-17 11:12", category: ACCOUNT_STATE_CHANGE, title: Income band edited, detail: "Declared annual income ₹4,80,000 → ₹48,00,000 · Customer C005 · no KYC refresh on file", actorId: E11}
+  - {id: ev-ticket, at: "2024-04-17 11:14", category: EMPLOYEE_ACTIVITY, title: Ticket created for the edit, detail: "Created by E11 two minutes after the edit (Grade X: self-created, post-hoc).", actorId: E11}
+  - {id: ev-t1, at: "2024-04-19 10:05", category: TRANSACTION, title: Inflow from counterparty 1, detail: "₹4,40,000 · X-501 → A-005", txnId: T1}
+  - {id: ev-t2, at: "2024-04-19 10:40", category: TRANSACTION, title: Inflow from counterparty 2, detail: "₹4,60,000 · X-502 → A-005", txnId: T2}
+  - {id: ev-t3, at: "2024-04-19 15:15", category: TRANSACTION, title: Inflow from counterparty 3, detail: "₹4,30,000 · X-503 → A-005", txnId: T3}
+  - {id: ev-t4, at: "2024-04-20 09:50", category: TRANSACTION, title: Inflow from counterparty 1, detail: "₹4,70,000 · X-501 → A-005", txnId: T4}
+  - {id: ev-hold, at: "2024-04-20 15:09", category: CONTROL_CHECK, title: Profile-based outward hold evaluated, detail: "Hold not triggered: observed inflow within 10× of the edited declared band."}
+  - {id: ev-t5, at: "2024-04-20 15:10", category: TRANSACTION, title: Outward transfer, detail: "₹10,00,000 · A-005 → X-504", txnId: T5}
+  - {id: ev-t6, at: "2024-04-20 16:00", category: TRANSACTION, title: Outward transfer, detail: "₹7,80,000 · A-005 → X-504", txnId: T6}
+
+controls:
+  - {id: ctl-hold, name: Profile-based outward hold, outcome: PASS, integrity: HOLLOW, reason: Hold evaluated against an income band edited by E11 without a KYC refresh (Grade X), writerEventId: ev-profile-edit, writerGrade: X}
+  - {id: ctl-mfa, name: MFA (one-time password), outcome: PASS, integrity: GENUINE, reason: OTP delivered to the customer's unchanged registered number, writerEventId: null, writerGrade: null}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: NOT_FOUND, detail: No customer request or KYC refresh for the income-band edit.}
+  - {key: employee-authorization, label: Employee Authorization, status: MISSING, detail: No independent approval found for the profile edit.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: OTP delivered to the customer's registered number.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Branch CCTV not configured for this terminal.}
+
+documents:
+  - {id: d1, name: system_logs_20240420.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: login_logs_e11.csv, kind: CSV, generator: login_logs}
+  - {id: d3, name: customer_profile_history_c005.json, kind: JSON, generator: account_state}
+  - {id: d4, name: auth_records.txt, kind: TXT, generator: auth_records}
+
+connections:
+  - {credential: E11, type: PROFILE_EDIT, strength: STRONG, targetNodeId: C005, evidence: "declared income band edited by E11 on 17 Apr, three days before the inflows"}
+
+pathSteps:
+  - {key: explanation, label: Business explanation, detail: Documents that explain the inflows., artifact: "None: no sale deed, loan or mandate on file", grade: E, integrity: HOLLOW}
+  - {key: profile, label: Profile edit, detail: Declared income band., artifact: Edited by a staff credential with no KYC refresh, grade: X, integrity: HOLLOW}
+  - {key: inflows, label: Inflows, detail: Deposits into the account., artifact: Four deposits from three counterparties in two days, grade: null, integrity: HOLLOW}
+  - {key: outflows, label: Outward transfers, detail: Funds leave the account., artifact: Two transfers to one new counterparty within hours, grade: null, integrity: HOLLOW}
+
+insiders:
+  - employeeId: E11
+    signals: [P1, P4, P10]
+    attribution: HIGH
+    attributionNote: "Session, terminal and attendance data are consistent; 4 staff hold the profile-edit permission."
+    staffWithSamePermission: 4
+    credentialMisuseIndicators: false
+    attendanceAvailable: true
+    actions:
+      - {at: "2024-04-17 11:12", action: Edited declared income band, account: C005, permitted: true, inPortfolio: false, evidenceGrade: X}
+      - {at: "2024-04-17 11:14", action: Created supporting ticket, account: C005, permitted: true, inPortfolio: false, evidenceGrade: X}
+
+replay:
+  targetLabel: "Outward transfers T5-T6 (₹17,80,000)"
+  candidates:
+    - {id: c-edit, label: Income-band edit (E11), eventId: ev-profile-edit, declaredRole: null, dependents: [ev-hold]}
+    - {id: c-ticket, label: Supporting ticket (E11), eventId: ev-ticket, declaredRole: CONCEALING, dependents: []}
+  disablingSets: [[c-edit]]
+  coverage: {modelled: 2, applicable: 2, status: FULL}
+  pathEventIds: [ev-t5, ev-t6]
+  steps:
+    - {title: Original transaction path is executed, detail: The outward hold did not trigger.}
+    - {title: Remove employee action (income-band edit), detail: "Declared band returns to ₹4,80,000; observed inflow exceeds the hold threshold."}
+    - {title: Replay transaction path, detail: Outward transfers are held for review.}
+    - {title: Conclusion, detail: The edit was operationally necessary for the outward transfers under the modelled hold.}
+
+reach: []

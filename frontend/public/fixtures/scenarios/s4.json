@@ -1,0 +1,207 @@
+{
+ "id": "S4",
+ "alertId": "ALT-2024-004",
+ "kind": "SWEEP",
+ "twinOf": null,
+ "level": "INFO",
+ "title": "Treasury sweep loop explained by group mandate",
+ "customerId": "C007",
+ "victimAccountIds": [
+  "A-007"
+ ],
+ "nodes": [
+  {
+   "id": "C007",
+   "kind": "customer",
+   "label": "Customer C007",
+   "sub": "Group treasury",
+   "x": 110,
+   "y": 240
+  },
+  {
+   "id": "A-007",
+   "kind": "account",
+   "label": "A",
+   "sub": "A-007 · Parent",
+   "balance": 100000,
+   "x": 430,
+   "y": 90
+  },
+  {
+   "id": "A-008",
+   "kind": "account",
+   "label": "B",
+   "sub": "A-008 · Subsidiary 1",
+   "balance": 500000,
+   "x": 720,
+   "y": 300
+  },
+  {
+   "id": "A-009",
+   "kind": "account",
+   "label": "C",
+   "sub": "A-009 · Subsidiary 2",
+   "balance": 500000,
+   "x": 430,
+   "y": 420
+  }
+ ],
+ "transactions": [
+  {
+   "id": "T1",
+   "from": "A-007",
+   "to": "A-008",
+   "amount": 5000000,
+   "at": "2024-04-26T17:00:00+05:30",
+   "kind": "SWEEP",
+   "outcome": "EXECUTED",
+   "cycle": true
+  },
+  {
+   "id": "T2",
+   "from": "A-008",
+   "to": "A-009",
+   "amount": 4950000,
+   "at": "2024-04-26T17:20:00+05:30",
+   "kind": "SWEEP",
+   "outcome": "EXECUTED",
+   "cycle": true
+  },
+  {
+   "id": "T3",
+   "from": "A-009",
+   "to": "A-007",
+   "amount": 4900000,
+   "at": "2024-04-26T17:45:00+05:30",
+   "kind": "SWEEP",
+   "outcome": "EXECUTED",
+   "cycle": true
+  }
+ ],
+ "timeline": [
+  {
+   "id": "ev-mandate",
+   "at": "2024-02-01T10:00:00+05:30",
+   "category": "CONTROL_CHECK",
+   "title": "Group sweep mandate registered",
+   "detail": "Mandate M-2024-044 under group code GRP-118 registered by the group's authorised signatories."
+  },
+  {
+   "id": "ev-t1",
+   "at": "2024-04-26T17:00:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Sweep parent → subsidiary 1",
+   "detail": "₹50,00,000 · A-007 → A-008",
+   "txnId": "T1"
+  },
+  {
+   "id": "ev-t2",
+   "at": "2024-04-26T17:20:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Sweep subsidiary 1 → subsidiary 2",
+   "detail": "₹49,50,000 · A-008 → A-009",
+   "txnId": "T2"
+  },
+  {
+   "id": "ev-t3",
+   "at": "2024-04-26T17:45:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Sweep returns to parent",
+   "detail": "₹49,00,000 · A-009 → A-007 (loop closes)",
+   "txnId": "T3"
+  },
+  {
+   "id": "ev-explained",
+   "at": "2024-04-26T18:20:00+05:30",
+   "category": "CONTROL_CHECK",
+   "title": "Explanation check passed",
+   "detail": "Group code and mandate pre-date the pattern; recurrence found daily; no economic outflow."
+  }
+ ],
+ "controls": [
+  {
+   "id": "ctl-explain",
+   "name": "Explanation check",
+   "outcome": "PASS",
+   "integrity": "GENUINE",
+   "reason": "Independent, pre-dated evidence found: group code GRP-118 and sweep mandate M-2024-044",
+   "writerEventId": "ev-mandate",
+   "writerGrade": "A"
+  }
+ ],
+ "evidenceSummary": [
+  {
+   "key": "customer-request",
+   "label": "Customer Request",
+   "status": "FOUND",
+   "detail": "Sweep mandate M-2024-044 on file."
+  },
+  {
+   "key": "employee-authorization",
+   "label": "Employee Authorization",
+   "status": "FOUND",
+   "detail": "No employee action on the accounts in the lookback window."
+  },
+  {
+   "key": "mfa-verification",
+   "label": "MFA Verification",
+   "status": "AVAILABLE",
+   "detail": "Sweeps run under the standing mandate."
+  },
+  {
+   "key": "system-logs",
+   "label": "System Logs",
+   "status": "AVAILABLE",
+   "detail": "All required logs retrieved."
+  },
+  {
+   "key": "video-evidence",
+   "label": "Video Evidence",
+   "status": "NOT_AVAILABLE",
+   "detail": "Not applicable for scheduled sweeps."
+  }
+ ],
+ "documents": [
+  {
+   "id": "d1",
+   "name": "system_logs_20240426.json",
+   "kind": "JSON",
+   "generator": "system_logs"
+  },
+  {
+   "id": "d2",
+   "name": "sweep_mandate_records.txt",
+   "kind": "TXT",
+   "generator": "auth_records"
+  }
+ ],
+ "connections": [],
+ "pathSteps": [
+  {
+   "key": "explanation",
+   "label": "Business explanation",
+   "detail": "Mandate, group code or recurrence.",
+   "artifact": "Group code GRP-118 and mandate M-2024-044 pre-date the loop",
+   "grade": "A",
+   "integrity": "GENUINE"
+  },
+  {
+   "key": "transfers",
+   "label": "Transfers",
+   "detail": "Loop of sweeps.",
+   "artifact": "Three sweeps close a loop under the mandate",
+   "grade": null,
+   "integrity": "GENUINE"
+  }
+ ],
+ "insiders": [],
+ "replay": null,
+ "reach": [],
+ "employeeIds": [],
+ "beneficiaryIds": [],
+ "customerIds": [
+  "C007"
+ ],
+ "explanation": "Group code GRP-118 and standing sweep mandate M-2024-044 pre-date the loop; the same sweep runs daily.",
+ "divergenceNote": null
+}

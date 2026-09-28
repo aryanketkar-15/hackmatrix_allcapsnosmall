@@ -1,0 +1,230 @@
+{
+ "id": "S5",
+ "alertId": "ALT-2024-005",
+ "kind": "GAP",
+ "twinOf": null,
+ "level": "DATA_GAP",
+ "title": "Beneficiary manipulation with missing MFA record",
+ "customerId": "C008",
+ "victimAccountIds": [
+  "A-010"
+ ],
+ "nodes": [
+  {
+   "id": "C008",
+   "kind": "customer",
+   "label": "Customer C008",
+   "sub": "Senior citizen",
+   "x": 110,
+   "y": 90
+  },
+  {
+   "id": "E23",
+   "kind": "employee",
+   "label": "Employee E23",
+   "sub": "Branch Staff",
+   "x": 110,
+   "y": 330
+  },
+  {
+   "id": "A-010",
+   "kind": "account",
+   "label": "A",
+   "sub": "A-010",
+   "balance": 150000,
+   "x": 430,
+   "y": 220
+  },
+  {
+   "id": "X-1001",
+   "kind": "beneficiary",
+   "label": "Beneficiary X",
+   "sub": "X-1001 · External",
+   "x": 780,
+   "y": 220
+  }
+ ],
+ "transactions": [
+  {
+   "id": "T1",
+   "from": "A-010",
+   "to": "X-1001",
+   "amount": 650000,
+   "at": "2024-04-25T11:20:00+05:30",
+   "kind": "TRANSFER",
+   "outcome": "EXECUTED",
+   "cycle": false
+  },
+  {
+   "id": "T2",
+   "from": "A-010",
+   "to": "X-1001",
+   "amount": 200000,
+   "at": "2024-04-25T11:50:00+05:30",
+   "kind": "TRANSFER",
+   "outcome": "EXECUTED",
+   "cycle": false
+  }
+ ],
+ "timeline": [
+  {
+   "id": "ev-login23",
+   "at": "2024-04-25T10:02:00+05:30",
+   "category": "EMPLOYEE_ACTIVITY",
+   "title": "Employee E23 logged in",
+   "detail": "Branch Terminal · IP: 10.1.9.4",
+   "actorId": "E23"
+  },
+  {
+   "id": "ev-benef",
+   "at": "2024-04-25T10:15:00+05:30",
+   "category": "ACCOUNT_STATE_CHANGE",
+   "title": "Beneficiary added",
+   "detail": "Name: X Traders · Account: ••7788 · added on behalf of the customer",
+   "actorId": "E23"
+  },
+  {
+   "id": "ev-gap-mfa",
+   "at": "2024-04-25T10:20:00+05:30",
+   "category": "CONTROL_CHECK",
+   "title": "Missing evidence: MFA gateway record",
+   "detail": "No OTP challenge record found for the beneficiary addition. Gateway health shows an outage from 10:00 to 10:40.",
+   "gap": true,
+   "uncertaintySec": 1200
+  },
+  {
+   "id": "ev-t1",
+   "at": "2024-04-25T11:20:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Transfer to beneficiary X",
+   "detail": "₹6,50,000 · A-010 → X-1001",
+   "txnId": "T1"
+  },
+  {
+   "id": "ev-t2",
+   "at": "2024-04-25T11:50:00+05:30",
+   "category": "TRANSACTION",
+   "title": "Transfer to beneficiary X",
+   "detail": "₹2,00,000 · A-010 → X-1001",
+   "txnId": "T2"
+  }
+ ],
+ "controls": [
+  {
+   "id": "ctl-mfa",
+   "name": "MFA (one-time password)",
+   "outcome": "PASS",
+   "integrity": "UNKNOWN",
+   "reason": "Authorization data unavailable (Grade U): MFA gateway record missing for the beneficiary addition",
+   "writerEventId": "ev-benef",
+   "writerGrade": "U"
+  },
+  {
+   "id": "ctl-limit",
+   "name": "Daily transfer limit",
+   "outcome": "PASS",
+   "integrity": "GENUINE",
+   "reason": "Transfers within the recorded limit",
+   "writerEventId": null,
+   "writerGrade": null
+  }
+ ],
+ "evidenceSummary": [
+  {
+   "key": "customer-request",
+   "label": "Customer Request",
+   "status": "MISSING",
+   "detail": "Authorization source unavailable for this branch on the day."
+  },
+  {
+   "key": "employee-authorization",
+   "label": "Employee Authorization",
+   "status": "NOT_FOUND",
+   "detail": "No approval record found."
+  },
+  {
+   "key": "mfa-verification",
+   "label": "MFA Verification",
+   "status": "MISSING",
+   "detail": "OTP challenge record missing (gateway outage 10:00-10:40)."
+  },
+  {
+   "key": "system-logs",
+   "label": "System Logs",
+   "status": "AVAILABLE",
+   "detail": "Core-banking logs retrieved."
+  },
+  {
+   "key": "video-evidence",
+   "label": "Video Evidence",
+   "status": "NOT_AVAILABLE",
+   "detail": "Branch CCTV not configured for this terminal."
+  }
+ ],
+ "documents": [
+  {
+   "id": "d1",
+   "name": "system_logs_20240425.json",
+   "kind": "JSON",
+   "generator": "system_logs"
+  },
+  {
+   "id": "d2",
+   "name": "login_logs_e23.csv",
+   "kind": "CSV",
+   "generator": "login_logs"
+  },
+  {
+   "id": "d3",
+   "name": "gateway_health_20240425.json",
+   "kind": "JSON",
+   "generator": "mfa_logs"
+  }
+ ],
+ "connections": [
+  {
+   "credential": "E23",
+   "type": "STATE_DEPENDENCY",
+   "strength": "MEDIUM",
+   "targetNodeId": "A-010",
+   "evidence": "beneficiary version written by E23 was consumed by T1 and T2 (control input unverified)"
+  }
+ ],
+ "pathSteps": [],
+ "insiders": [
+  {
+   "employeeId": "E23",
+   "signals": [
+    "P2"
+   ],
+   "attribution": "LOW",
+   "attributionNote": "Attendance data is unavailable for this credential, so attribution cannot be confirmed.",
+   "staffWithSamePermission": 8,
+   "credentialMisuseIndicators": false,
+   "attendanceAvailable": false,
+   "actions": [
+    {
+     "at": "2024-04-25T10:15:00+05:30",
+     "action": "Added beneficiary",
+     "account": "A-010",
+     "permitted": true,
+     "inPortfolio": false,
+     "evidenceGrade": "U"
+    }
+   ]
+  }
+ ],
+ "replay": null,
+ "reach": [],
+ "employeeIds": [
+  "E23"
+ ],
+ "beneficiaryIds": [
+  "X-1001"
+ ],
+ "customerIds": [
+  "C008"
+ ],
+ "explanation": null,
+ "divergenceNote": null
+}

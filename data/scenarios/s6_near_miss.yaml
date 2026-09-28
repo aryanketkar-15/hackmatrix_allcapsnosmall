@@ -1,0 +1,90 @@
+# S6 - Near-miss: the control held. The OTP went to the real customer, who did not respond, so the transfer was blocked.
+id: S6
+kind: NEAR_MISS
+twinOf: null
+level: NEAR_MISS
+title: Beneficiary added on a dormant account, transfer blocked
+customerId: C009
+victimAccountIds: [A-011]
+employeeIds: [E19]
+beneficiaryIds: [X-1101]
+customerIds: [C009]
+explanation: null
+divergenceNote: null
+
+alert:
+  id: ALT-2024-006
+  title: Beneficiary added on a dormant account, transfer blocked
+  type: BENEFICIARY_MANIPULATION
+  status: UNDER_REVIEW
+  createdAt: "2024-04-27 14:40"
+  assignedTo: null
+  evidenceConfidence: MEDIUM
+  summary: >-
+    A staff credential added a beneficiary on a dormant account and a ₹8,00,000 transfer was attempted. The one-time
+    password went to the customer's unchanged number and was not verified, so the control held and the transfer was blocked.
+  reasons:
+    - Beneficiary added by a staff credential on a dormant account with no customer request
+    - Outcome BLOCKED: the OTP went to the real customer and was never verified (control held)
+    - Insider-connected attempt without loss; the account remains in a primed state
+  riskIndicators:
+    - {text: Beneficiary added on a dormant account, severity: medium}
+    - {text: Transfer blocked by a genuine control, severity: medium}
+
+customer:
+  id: C009
+  name: Lata Bhosale
+  occupation: Retired teacher
+  age: 71
+  annualIncome: 540000
+  location: Satara
+
+nodes:
+  - {id: C009, kind: customer, label: Customer C009, sub: Senior citizen, x: 110, y: 90}
+  - {id: E19, kind: employee, label: Employee E19, sub: Branch Staff, x: 110, y: 330}
+  - {id: A-011, kind: account, label: A, sub: A-011 · dormant, balance: 900000, x: 430, y: 220}
+  - {id: X-1101, kind: beneficiary, label: Beneficiary X, sub: X-1101 · External, x: 780, y: 220}
+
+transactions:
+  - {id: T1, from: A-011, to: X-1101, amount: 800000, at: "2024-04-27 13:40", kind: TRANSFER, outcome: BLOCKED, cycle: false}
+
+timeline:
+  - {id: ev-login19, at: "2024-04-27 13:05", category: EMPLOYEE_ACTIVITY, title: Employee E19 logged in, detail: "Branch Terminal · IP: 10.1.3.8", actorId: E19}
+  - {id: ev-benef, at: "2024-04-27 13:20", category: ACCOUNT_STATE_CHANGE, title: Beneficiary added, detail: "Name: X Enterprises · Account: ••5521 · account dormant since 2022", actorId: E19}
+  - {id: ev-mfa, at: "2024-04-27 13:40", category: CONTROL_CHECK, title: OTP sent to registered number, detail: "OTP sent to ••••••318 (customer's unchanged number). Not verified within the window: control held."}
+  - {id: ev-t1, at: "2024-04-27 13:40", category: TRANSACTION, title: Transfer blocked, detail: "₹8,00,000 · A-011 → X-1101 (blocked: OTP not verified)", txnId: T1}
+
+controls:
+  - {id: ctl-mfa, name: MFA (one-time password), outcome: FAIL, integrity: GENUINE, reason: OTP went to the customer's registered number (never changed) and was not verified, writerEventId: null, writerGrade: null}
+  - {id: ctl-benef, name: Beneficiary validation, outcome: PASS, integrity: GENUINE, reason: Beneficiary account format check passed, writerEventId: null, writerGrade: null}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: NOT_FOUND, detail: No customer request for the beneficiary addition.}
+  - {key: employee-authorization, label: Employee Authorization, status: MISSING, detail: No independent approval found.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: OTP sent to the real customer; never verified.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Branch CCTV not configured for this terminal.}
+
+documents:
+  - {id: d1, name: system_logs_20240427.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: login_logs_e19.csv, kind: CSV, generator: login_logs}
+  - {id: d3, name: mfa_logs.json, kind: JSON, generator: mfa_logs}
+
+connections:
+  - {credential: E19, type: STATE_DEPENDENCY, strength: STRONG, targetNodeId: A-011, evidence: "beneficiary version written by E19 was consumed by the blocked transfer T1"}
+
+pathSteps: []
+
+insiders:
+  - employeeId: E19
+    signals: [P1, P2, P9]
+    attribution: MEDIUM
+    attributionNote: "6 staff hold the same permission; no completed transfer, so the outcome is a near-miss."
+    staffWithSamePermission: 6
+    credentialMisuseIndicators: false
+    attendanceAvailable: true
+    actions:
+      - {at: "2024-04-27 13:20", action: Added beneficiary, account: A-011, permitted: true, inPortfolio: false, evidenceGrade: E}
+
+replay: null
+reach: []

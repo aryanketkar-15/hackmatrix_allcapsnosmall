@@ -1,0 +1,86 @@
+# S2-T - legitimate look-alike of S2: monthly payout batch under a standing mandate (group code).
+id: S2T
+kind: TWIN
+twinOf: S2
+level: INFO
+title: Structuring-like batch explained by a payout mandate
+customerId: C004
+victimAccountIds: [A-004]
+employeeIds: []
+beneficiaryIds: [X-401, X-402, X-403]
+customerIds: [C004]
+explanation: "Standing payout mandate M-2024-118 (group code GRP-204) pre-dates the batch; recurrence is monthly and the amounts follow the mandate schedule."
+divergenceNote: null
+
+alert:
+  id: ALT-2024-007
+  title: Structuring-like batch explained by a payout mandate
+  type: STRUCTURING
+  status: CLOSED
+  createdAt: "2024-04-15 12:20"
+  closedAt: "2024-04-16 10:00"
+  assignedTo: Amit Singh
+  evidenceConfidence: HIGH
+  summary: >-
+    Three transfers just below the ₹10,00,000 threshold within an hour. Explained by a standing payout mandate that
+    pre-dates the batch; no insider connection found.
+  reasons:
+    - Pattern matches structuring (three transfers between ₹9,20,000 and ₹9,80,000)
+    - Standing mandate M-2024-118 and group code GRP-204 pre-date the batch and come from an independent source
+    - Recurrence: the same batch ran on 15 March and 15 February
+  riskIndicators:
+    - {text: Amounts clustered just below the reporting threshold, severity: medium}
+
+customer:
+  id: C004
+  name: Deshmukh Textiles Pvt Ltd
+  occupation: Textile manufacturer
+  age: 0
+  annualIncome: 96000000
+  location: Solapur
+  type: Business
+
+nodes:
+  - {id: C004, kind: customer, label: Customer C004, sub: Business Customer, x: 110, y: 150}
+  - {id: A-004, kind: account, label: A, sub: A-004, balance: 5200000, x: 430, y: 240}
+  - {id: X-401, kind: beneficiary, label: Group entity 1, sub: X-401 · GRP-204, x: 780, y: 80}
+  - {id: X-402, kind: beneficiary, label: Group entity 2, sub: X-402 · GRP-204, x: 800, y: 240}
+  - {id: X-403, kind: beneficiary, label: Group entity 3, sub: X-403 · GRP-204, x: 780, y: 400}
+
+transactions:
+  - {id: T1, from: A-004, to: X-401, amount: 920000, at: "2024-04-15 11:00", kind: PAYROLL, outcome: EXECUTED, cycle: false}
+  - {id: T2, from: A-004, to: X-402, amount: 980000, at: "2024-04-15 11:10", kind: PAYROLL, outcome: EXECUTED, cycle: false}
+  - {id: T3, from: A-004, to: X-403, amount: 950000, at: "2024-04-15 11:20", kind: PAYROLL, outcome: EXECUTED, cycle: false}
+
+timeline:
+  - {id: ev-mandate, at: "2024-03-01 10:00", category: CONTROL_CHECK, title: Standing payout mandate registered, detail: "Mandate M-2024-118 (group code GRP-204) registered by the customer's finance signatory."}
+  - {id: ev-t1, at: "2024-04-15 11:00", category: TRANSACTION, title: Payout to group entity 1, detail: "₹9,20,000 · A-004 → X-401", txnId: T1}
+  - {id: ev-t2, at: "2024-04-15 11:10", category: TRANSACTION, title: Payout to group entity 2, detail: "₹9,80,000 · A-004 → X-402", txnId: T2}
+  - {id: ev-t3, at: "2024-04-15 11:20", category: TRANSACTION, title: Payout to group entity 3, detail: "₹9,50,000 · A-004 → X-403", txnId: T3}
+  - {id: ev-explained, at: "2024-04-15 12:20", category: CONTROL_CHECK, title: Explanation check passed, detail: Mandate and group code pre-date the batch; recurrence found on two earlier months.}
+
+controls:
+  - {id: ctl-explain, name: Explanation check, outcome: PASS, integrity: GENUINE, reason: "Independent, pre-dated evidence found: mandate M-2024-118 and group code GRP-204", writerEventId: ev-mandate, writerGrade: A}
+  - {id: ctl-limit, name: Transaction and daily limit, outcome: PASS, integrity: GENUINE, reason: Standing corporate limit unchanged, writerEventId: null, writerGrade: null}
+
+evidenceSummary:
+  - {key: customer-request, label: Customer Request, status: FOUND, detail: Standing mandate M-2024-118 on file.}
+  - {key: employee-authorization, label: Employee Authorization, status: FOUND, detail: No employee action on the account in the lookback window.}
+  - {key: mfa-verification, label: MFA Verification, status: AVAILABLE, detail: Batch authorised by the finance signatory.}
+  - {key: system-logs, label: System Logs, status: AVAILABLE, detail: All required logs retrieved.}
+  - {key: video-evidence, label: Video Evidence, status: NOT_AVAILABLE, detail: Not applicable for a digital-channel batch.}
+
+documents:
+  - {id: d1, name: system_logs_20240415.json, kind: JSON, generator: system_logs}
+  - {id: d2, name: mandate_records.txt, kind: TXT, generator: auth_records}
+
+pathSteps:
+  - {key: explanation, label: Business explanation, detail: "Mandate, group code or recurrence.", artifact: "Mandate M-2024-118 and group code GRP-204 pre-date the batch", grade: A, integrity: GENUINE}
+  - {key: limit, label: Limit change, detail: Per-transaction and daily limits., artifact: "Standing corporate limit, no change", grade: null, integrity: GENUINE}
+  - {key: approval, label: Approval, detail: Checker review., artifact: Batch approved by the finance signatory, grade: A, integrity: GENUINE}
+  - {key: transfers, label: Transfers, detail: Outbound payments., artifact: "Three monthly payouts just below ₹10,00,000 under the mandate", grade: null, integrity: GENUINE}
+
+connections: []
+insiders: []
+replay: null
+reach: []
