@@ -316,7 +316,7 @@ def main() -> int:
     for lvl, st, ty in zip(levels, statuses, types):
         aid = f"ALT-2024-{next_num:03d}"; next_num += 1
         # more alerts in the last week than the week before (dashboard deltas are computed, not typed)
-        if rng.random() < 0.55:
+        if rng.random() < 0.34:
             created = week_start + timedelta(minutes=rng.randint(0, int((hero_created - week_start).total_seconds() // 60) - 1))
         else:
             created = dt(cfg["windowStart"]) + timedelta(minutes=rng.randint(0, int((week_start - dt(cfg["windowStart"])).total_seconds() // 60)))
