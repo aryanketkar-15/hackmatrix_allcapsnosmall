@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import type { AlertT, ScenarioT } from '../../types/contract';
 import type { AlertTabId } from './tabs';
+import { GraphTab } from '../graph/GraphTab';
 
 export interface TabViewProps { alert: AlertT; scenario: ScenarioT | null }
 
@@ -10,7 +11,7 @@ const Pending = ({ label }: { label: string }) => (
 
 /** Registry of tab bodies. Each later milestone replaces its entry. */
 export const TAB_VIEWS: Record<Exclude<AlertTabId, 'overview'>, ComponentType<TabViewProps>> = {
-  graph: () => <Pending label="Transaction Graph" />,
+  graph: GraphTab,
   timeline: () => <Pending label="Timeline" />,
   employee: () => <Pending label="Employee Activity" />,
   evidence: () => <Pending label="Evidence" />,
