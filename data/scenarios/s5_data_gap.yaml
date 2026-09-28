@@ -7,7 +7,7 @@ title: Beneficiary manipulation with missing MFA record
 customerId: C008
 victimAccountIds: [A-010]
 employeeIds: [E23]
-beneficiaryIds: [X-1001]
+beneficiaryIds: [X-701]
 customerIds: [C008]
 explanation: null
 divergenceNote: null
@@ -43,18 +43,18 @@ nodes:
   - {id: C008, kind: customer, label: Customer C008, sub: Senior citizen, x: 110, y: 90}
   - {id: E23, kind: employee, label: Employee E23, sub: Branch Staff, x: 110, y: 330}
   - {id: A-010, kind: account, label: A, sub: A-010, balance: 150000, x: 430, y: 220}
-  - {id: X-1001, kind: beneficiary, label: Beneficiary X, sub: X-1001 · External, x: 780, y: 220}
+  - {id: X-701, kind: beneficiary, label: Beneficiary X, sub: X-701 · External, x: 780, y: 220}
 
 transactions:
-  - {id: T1, from: A-010, to: X-1001, amount: 650000, at: "2024-04-25 11:20", kind: TRANSFER, outcome: EXECUTED, cycle: false}
-  - {id: T2, from: A-010, to: X-1001, amount: 200000, at: "2024-04-25 11:50", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T1, from: A-010, to: X-701, amount: 650000, at: "2024-04-25 11:20", kind: TRANSFER, outcome: EXECUTED, cycle: false}
+  - {id: T2, from: A-010, to: X-701, amount: 200000, at: "2024-04-25 11:50", kind: TRANSFER, outcome: EXECUTED, cycle: false}
 
 timeline:
   - {id: ev-login23, at: "2024-04-25 10:02", category: EMPLOYEE_ACTIVITY, title: Employee E23 logged in, detail: "Branch Terminal · IP: 10.1.9.4", actorId: E23}
   - {id: ev-benef, at: "2024-04-25 10:15", category: ACCOUNT_STATE_CHANGE, title: Beneficiary added, detail: "Name: X Traders · Account: ••7788 · added on behalf of the customer", actorId: E23}
   - {id: ev-gap-mfa, at: "2024-04-25 10:20", category: CONTROL_CHECK, title: "Missing evidence: MFA gateway record", detail: "No OTP challenge record found for the beneficiary addition. Gateway health shows an outage from 10:00 to 10:40.", gap: true, uncertaintySec: 1200}
-  - {id: ev-t1, at: "2024-04-25 11:20", category: TRANSACTION, title: Transfer to beneficiary X, detail: "₹6,50,000 · A-010 → X-1001", txnId: T1}
-  - {id: ev-t2, at: "2024-04-25 11:50", category: TRANSACTION, title: Transfer to beneficiary X, detail: "₹2,00,000 · A-010 → X-1001", txnId: T2}
+  - {id: ev-t1, at: "2024-04-25 11:20", category: TRANSACTION, title: Transfer to beneficiary X, detail: "₹6,50,000 · A-010 → X-701", txnId: T1}
+  - {id: ev-t2, at: "2024-04-25 11:50", category: TRANSACTION, title: Transfer to beneficiary X, detail: "₹2,00,000 · A-010 → X-701", txnId: T2}
 
 controls:
   - {id: ctl-mfa, name: MFA (one-time password), outcome: PASS, integrity: UNKNOWN, reason: "Authorization data unavailable (Grade U): MFA gateway record missing for the beneficiary addition", writerEventId: ev-benef, writerGrade: U}

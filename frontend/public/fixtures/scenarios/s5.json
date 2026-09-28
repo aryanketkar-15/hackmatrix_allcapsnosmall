@@ -36,10 +36,10 @@
    "y": 220
   },
   {
-   "id": "X-1001",
+   "id": "X-701",
    "kind": "beneficiary",
    "label": "Beneficiary X",
-   "sub": "X-1001 · External",
+   "sub": "X-701 · External",
    "x": 780,
    "y": 220
   }
@@ -48,7 +48,7 @@
   {
    "id": "T1",
    "from": "A-010",
-   "to": "X-1001",
+   "to": "X-701",
    "amount": 650000,
    "at": "2024-04-25T11:20:00+05:30",
    "kind": "TRANSFER",
@@ -58,7 +58,7 @@
   {
    "id": "T2",
    "from": "A-010",
-   "to": "X-1001",
+   "to": "X-701",
    "amount": 200000,
    "at": "2024-04-25T11:50:00+05:30",
    "kind": "TRANSFER",
@@ -97,7 +97,7 @@
    "at": "2024-04-25T11:20:00+05:30",
    "category": "TRANSACTION",
    "title": "Transfer to beneficiary X",
-   "detail": "₹6,50,000 · A-010 → X-1001",
+   "detail": "₹6,50,000 · A-010 → X-701",
    "txnId": "T1"
   },
   {
@@ -105,7 +105,7 @@
    "at": "2024-04-25T11:50:00+05:30",
    "category": "TRANSACTION",
    "title": "Transfer to beneficiary X",
-   "detail": "₹2,00,000 · A-010 → X-1001",
+   "detail": "₹2,00,000 · A-010 → X-701",
    "txnId": "T2"
   }
  ],
@@ -220,7 +220,7 @@
   "E23"
  ],
  "beneficiaryIds": [
-  "X-1001"
+  "X-701"
  ],
  "customerIds": [
   "C008"

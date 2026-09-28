@@ -27,7 +27,7 @@ alert:
   reasons:
     - Pattern matches structuring (three transfers between ₹9,20,000 and ₹9,80,000)
     - Standing mandate M-2024-118 and group code GRP-204 pre-date the batch and come from an independent source
-    - Recurrence: the same batch ran on 15 March and 15 February
+    - "Recurrence: the same batch ran on 15 March and 15 February"
   riskIndicators:
     - {text: Amounts clustered just below the reporting threshold, severity: medium}
 

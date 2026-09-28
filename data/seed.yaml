@@ -1,0 +1,31 @@
+# Seed configuration. These are DESIGN PARAMETERS for scripted volume, not measured results.
+seed: 20260929
+asOf: "2024-04-30 18:00"       # as-of time used by the UI instead of "now"
+windowStart: "2024-04-01 00:00"
+windowEnd: "2024-04-30 23:59"
+
+totals:
+  alerts: 124
+  employees: 30
+  customers: 40
+
+levels: {HIGH: 28, MEDIUM: 52, WATCH: 30, DATA_GAP: 8, NEAR_MISS: 3, INFO: 3}
+statuses: {NEW: 18, UNDER_REVIEW: 14, ASSIGNED: 12, INVESTIGATING: 38, PENDING_EVIDENCE: 8, CLOSED: 34}
+types:
+  CIRCULAR_TRANSFER: 28
+  STRUCTURING: 24
+  FAN_OUT: 18
+  FAN_IN: 14
+  PASS_THROUGH: 12
+  BENEFICIARY_MANIPULATION: 10
+  DORMANT_ACTIVATION: 8
+  PROFILE_MISMATCH: 6
+  INSIDER_ACTIVITY: 4
+
+closedWithinLastDays: 7
+closedRecent: 32
+
+investigators:
+  - {id: U1, username: priya.sharma, name: Priya Sharma, role: Investigator, initials: PS}
+  - {id: U2, username: raj.mehta, name: Raj Mehta, role: Investigator, initials: RM}
+  - {id: U3, username: amit.singh, name: Amit Singh, role: Investigator, initials: AS}

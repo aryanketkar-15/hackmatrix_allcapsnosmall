@@ -7,7 +7,7 @@ title: Beneficiary added on a dormant account, transfer blocked
 customerId: C009
 victimAccountIds: [A-011]
 employeeIds: [E19]
-beneficiaryIds: [X-1101]
+beneficiaryIds: [X-801]
 customerIds: [C009]
 explanation: null
 divergenceNote: null
@@ -25,7 +25,7 @@ alert:
     password went to the customer's unchanged number and was not verified, so the control held and the transfer was blocked.
   reasons:
     - Beneficiary added by a staff credential on a dormant account with no customer request
-    - Outcome BLOCKED: the OTP went to the real customer and was never verified (control held)
+    - "Outcome BLOCKED: the OTP went to the real customer and was never verified (control held)"
     - Insider-connected attempt without loss; the account remains in a primed state
   riskIndicators:
     - {text: Beneficiary added on a dormant account, severity: medium}
@@ -43,16 +43,16 @@ nodes:
   - {id: C009, kind: customer, label: Customer C009, sub: Senior citizen, x: 110, y: 90}
   - {id: E19, kind: employee, label: Employee E19, sub: Branch Staff, x: 110, y: 330}
   - {id: A-011, kind: account, label: A, sub: A-011 · dormant, balance: 900000, x: 430, y: 220}
-  - {id: X-1101, kind: beneficiary, label: Beneficiary X, sub: X-1101 · External, x: 780, y: 220}
+  - {id: X-801, kind: beneficiary, label: Beneficiary X, sub: X-801 · External, x: 780, y: 220}
 
 transactions:
-  - {id: T1, from: A-011, to: X-1101, amount: 800000, at: "2024-04-27 13:40", kind: TRANSFER, outcome: BLOCKED, cycle: false}
+  - {id: T1, from: A-011, to: X-801, amount: 800000, at: "2024-04-27 13:40", kind: TRANSFER, outcome: BLOCKED, cycle: false}
 
 timeline:
   - {id: ev-login19, at: "2024-04-27 13:05", category: EMPLOYEE_ACTIVITY, title: Employee E19 logged in, detail: "Branch Terminal · IP: 10.1.3.8", actorId: E19}
   - {id: ev-benef, at: "2024-04-27 13:20", category: ACCOUNT_STATE_CHANGE, title: Beneficiary added, detail: "Name: X Enterprises · Account: ••5521 · account dormant since 2022", actorId: E19}
   - {id: ev-mfa, at: "2024-04-27 13:40", category: CONTROL_CHECK, title: OTP sent to registered number, detail: "OTP sent to ••••••318 (customer's unchanged number). Not verified within the window: control held."}
-  - {id: ev-t1, at: "2024-04-27 13:40", category: TRANSACTION, title: Transfer blocked, detail: "₹8,00,000 · A-011 → X-1101 (blocked: OTP not verified)", txnId: T1}
+  - {id: ev-t1, at: "2024-04-27 13:40", category: TRANSACTION, title: Transfer blocked, detail: "₹8,00,000 · A-011 → X-801 (blocked: OTP not verified)", txnId: T1}
 
 controls:
   - {id: ctl-mfa, name: MFA (one-time password), outcome: FAIL, integrity: GENUINE, reason: OTP went to the customer's registered number (never changed) and was not verified, writerEventId: null, writerGrade: null}

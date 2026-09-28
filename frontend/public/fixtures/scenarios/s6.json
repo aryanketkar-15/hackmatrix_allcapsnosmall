@@ -36,10 +36,10 @@
    "y": 220
   },
   {
-   "id": "X-1101",
+   "id": "X-801",
    "kind": "beneficiary",
    "label": "Beneficiary X",
-   "sub": "X-1101 · External",
+   "sub": "X-801 · External",
    "x": 780,
    "y": 220
   }
@@ -48,7 +48,7 @@
   {
    "id": "T1",
    "from": "A-011",
-   "to": "X-1101",
+   "to": "X-801",
    "amount": 800000,
    "at": "2024-04-27T13:40:00+05:30",
    "kind": "TRANSFER",
@@ -85,7 +85,7 @@
    "at": "2024-04-27T13:40:00+05:30",
    "category": "TRANSACTION",
    "title": "Transfer blocked",
-   "detail": "₹8,00,000 · A-011 → X-1101 (blocked: OTP not verified)",
+   "detail": "₹8,00,000 · A-011 → X-801 (blocked: OTP not verified)",
    "txnId": "T1"
   }
  ],
@@ -202,7 +202,7 @@
   "E19"
  ],
  "beneficiaryIds": [
-  "X-1101"
+  "X-801"
  ],
  "customerIds": [
   "C009"
