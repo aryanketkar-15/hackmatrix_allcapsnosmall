@@ -6,6 +6,7 @@ import Styleguide from './pages/Styleguide';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Alerts from './pages/Alerts';
+import AlertDetail from './pages/AlertDetail';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -19,7 +20,7 @@ export const appRoutes: RouteObject[] = [
       { path: '/', element: <Navigate to="/dashboard" replace /> },
       { path: '/dashboard', element: <Dashboard /> },
       { path: '/alerts', element: <Alerts /> },
-      { path: '/alerts/:id/:tab?', element: <Placeholder title="Alert" /> },
+      { path: '/alerts/:id/:tab?', element: <AlertDetail /> },
       { path: '/cases', element: <Placeholder title="Investigations" /> },
       { path: '/customers', element: <Placeholder title="Customers" /> },
       { path: '/customers/:id/:tab?', element: <Placeholder title="Customer" /> },
