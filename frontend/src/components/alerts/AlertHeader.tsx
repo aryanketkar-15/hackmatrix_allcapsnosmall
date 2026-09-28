@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChevronLeft, Info } from 'lucide-react';
-import { Button, LevelChip, StatusChip, Tooltip } from '../ui';
+import { LevelChip, StatusChip, Tooltip } from '../ui';
 import { formatDateTimeIST, formatInr } from '../../lib/format';
 import type { AlertT } from '../../types/contract';
 import { AssignControl } from '../cases/AssignControl';
@@ -30,7 +30,7 @@ export function AlertHeader({ alert }: { alert: AlertT }) {
             <dt className="text-muted">Assigned to:</dt><dd className="font-medium" data-testid="assigned-to">{alert.assignedTo ?? 'Unassigned'}</dd>
             <dt className="text-muted">Created:</dt><dd>{formatDateTimeIST(alert.createdAt)}</dd>
           </dl>
-          <AssignControl alert={alert} fallback={<Button disabled>Assign / Reassign</Button>} />
+          <AssignControl alert={alert} />
         </div>
       </div>
     </div>
