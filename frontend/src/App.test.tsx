@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import Placeholder from './pages/Placeholder';
 import { NAV_ITEMS } from './components/layout/Sidebar';
 import { dataReady, renderAt } from './test/renderApp';
 
@@ -32,9 +33,8 @@ describe('app shell', () => {
     }
   });
 
-  it('shows a clear placeholder for unbuilt screens', async () => {
-    renderAt('/graph-explorer');
-    await dataReady();
+  it('has a clear placeholder component for screens that are not part of a build', () => {
+    render(<Placeholder title="Future screen" />);
     expect(screen.getByText('Not part of this build')).toBeInTheDocument();
   });
 });

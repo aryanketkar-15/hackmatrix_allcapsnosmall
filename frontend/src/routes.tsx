@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import NotFound from './pages/NotFound';
-import Placeholder from './pages/Placeholder';
 import Styleguide from './pages/Styleguide';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -16,6 +15,7 @@ import Employees from './pages/Employees';
 import EmployeeProfile from './pages/EmployeeProfile';
 import Transactions from './pages/Transactions';
 import Settings from './pages/Settings';
+import GraphExplorer from './pages/GraphExplorer';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 
 /** Full route table. Screens built in later milestones replace their placeholder here. */
@@ -38,7 +38,7 @@ export const appRoutes: RouteObject[] = [
       { path: '/transactions', element: <Transactions /> },
       { path: '/employees', element: <Employees /> },
       { path: '/employees/:id', element: <EmployeeProfile /> },
-      { path: '/graph-explorer', element: <Placeholder title="Graph Explorer" /> },
+      { path: '/graph-explorer', element: <GraphExplorer /> },
       { path: '/settings', element: <Settings /> },
       ...(import.meta.env.DEV || import.meta.env.MODE === 'test' ? [{ path: '/styleguide', element: <Styleguide /> }] : []),
       { path: '*', element: <NotFound /> },
