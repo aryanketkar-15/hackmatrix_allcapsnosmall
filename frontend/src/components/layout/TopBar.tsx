@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Bell, ChevronDown, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, PrototypeBadge, SearchInput } from '../ui';
+import { Avatar, PrototypeBadge } from '../ui';
 import { useAuth } from '../../auth/AuthContext';
+import { GlobalSearch } from './GlobalSearch';
+import { NotificationBell } from './NotificationBell';
 
-/** Top bar. Search and bell are wired in M2.5. */
 export function TopBar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -12,12 +13,10 @@ export function TopBar() {
 
   return (
     <header className="no-print flex h-14 shrink-0 items-center gap-4 border-b border-line bg-surface px-6">
-      <SearchInput className="w-full max-w-md" placeholder="Search for accounts, transactions, employees, customers…" aria-label="Global search" />
+      <GlobalSearch />
       <div className="ml-auto flex items-center gap-4">
         <PrototypeBadge />
-        <button type="button" aria-label="Notifications" className="relative rounded-full p-1.5 text-muted hover:bg-page">
-          <Bell size={17} />
-        </button>
+        <NotificationBell />
         <div className="relative">
           <button type="button" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)} className="flex items-center gap-2.5 rounded-md p-1 hover:bg-page">
             <Avatar initials={user?.initials ?? '?'} size={30} />
