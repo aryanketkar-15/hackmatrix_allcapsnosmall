@@ -32,6 +32,7 @@ export default function AlertDetail() {
         onChange={(t) => navigate(`/alerts/${alert.id}/${t}`)}
         items={ALERT_TABS.map((t) => ({ id: t.id, label: t.label, disabled: !tabEnabled(t, alert), title: tabEnabled(t, alert) ? undefined : SUMMARY_ONLY_NOTE }))}
       />
+      <div key={current} className="animate-fade-up">
       {!enabled ? (
         <div className="rounded-lg border border-line bg-surface"><EmptyState title="Not available for this alert" hint={SUMMARY_ONLY_NOTE} /></div>
       ) : alert.detailLevel === 'FULL' && scenario === undefined && current !== 'overview' && current !== 'notes' ? (
@@ -41,6 +42,7 @@ export default function AlertDetail() {
       ) : View ? (
         <View alert={alert} scenario={scenario ?? null} />
       ) : null}
+      </div>
     </div>
   );
 }

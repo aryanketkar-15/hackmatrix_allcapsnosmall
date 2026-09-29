@@ -22,7 +22,7 @@ function Skyline() {
           <stop offset="1" stopColor="#dbeafe" stopOpacity="0.2" />
         </linearGradient>
       </defs>
-      <g fill="url(#sk)">
+      <g fill="url(#sk)" className="skyline-rise">
         <rect x="20" y="120" width="60" height="100" /><rect x="90" y="90" width="50" height="130" />
         <rect x="150" y="60" width="120" height="160" /><rect x="280" y="100" width="70" height="120" />
         <rect x="360" y="70" width="60" height="150" /><rect x="430" y="110" width="80" height="110" />
@@ -68,14 +68,16 @@ export default function Login() {
   return (
     <div className="grid min-h-screen grid-cols-1 bg-page lg:grid-cols-[1.15fr_1fr]">
       <section className="relative hidden overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100 p-12 lg:block">
-        <Logo size="lg" />
-        <h1 className="mt-6 max-w-sm text-2xl font-semibold leading-snug text-ink">Uncovering the Real Story Behind Every Transaction</h1>
-        <p className="mt-2 text-sm text-muted">Linking People · Actions · Money</p>
+        <div className="pointer-events-none absolute -right-20 top-28 h-72 w-72 animate-float rounded-full bg-blue-200/40 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute left-1/3 top-1/2 h-56 w-56 animate-float rounded-full bg-indigo-200/30 blur-3xl [animation-delay:-3s]" aria-hidden />
+        <div className="animate-fade-up"><Logo size="lg" /></div>
+        <h1 className="mt-6 max-w-sm animate-fade-up text-2xl font-semibold leading-snug text-ink [animation-delay:120ms]">Uncovering the Real Story Behind Every Transaction</h1>
+        <p className="mt-2 animate-fade-up text-sm text-muted [animation-delay:200ms]">Linking People · Actions · Money</p>
         <Skyline />
         <div className="absolute inset-x-12 bottom-24 grid grid-cols-4 gap-4">
-          {FEATURES.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex flex-col items-center gap-2 text-center">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-200 bg-white text-primary shadow-sm"><Icon size={20} /></span>
+          {FEATURES.map(({ icon: Icon, label }, i) => (
+            <div key={label} className="group flex animate-fade-up flex-col items-center gap-2 text-center" style={{ animationDelay: `${450 + i * 90}ms` }}>
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-200 bg-white text-primary shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-110 group-hover:shadow-md"><Icon size={20} /></span>
               <span className="text-[11px] font-medium text-ink">{label}</span>
             </div>
           ))}
@@ -88,21 +90,21 @@ export default function Login() {
 
       <section className="flex flex-col items-center justify-center p-6">
         <div className="lg:hidden mb-6"><Logo size="lg" /></div>
-        <form onSubmit={onSubmit} noValidate className="w-full max-w-sm rounded-xl border border-line bg-surface p-8 shadow-sm" aria-label="Sign in">
+        <form onSubmit={onSubmit} noValidate className="w-full max-w-sm animate-fade-up rounded-xl border border-line bg-surface p-8 shadow-[0_10px_30px_rgb(16_24_40/0.08)] [animation-delay:150ms]" aria-label="Sign in">
           <h2 className="text-xl font-semibold">Welcome to KHOJI</h2>
           <p className="mb-6 mt-1 text-xs text-muted">Sign in to your account</p>
 
           <label htmlFor="username" className="mb-1 block text-xs font-medium">Username</label>
           <input id="username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter your username" aria-invalid={errors.username ? true : undefined}
-            className="mb-1 h-10 w-full rounded-md border border-line px-3 text-sm" />
+            className="mb-1 h-10 w-full rounded-md border border-line px-3 text-sm transition-[border-color,box-shadow] duration-200 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235/0.12)] focus:outline-none" />
           {errors.username ? <p role="alert" className="mb-2 text-xs text-risk-high">{errors.username}</p> : <div className="mb-3" />}
 
           <label htmlFor="password" className="mb-1 block text-xs font-medium">Password</label>
           <div className="relative">
             <input id="password" type={show ? 'text' : 'password'} autoComplete="current-password" value={password}
               onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password"
-              aria-invalid={errors.password ? true : undefined} className="h-10 w-full rounded-md border border-line px-3 pr-10 text-sm" />
+              aria-invalid={errors.password ? true : undefined} className="h-10 w-full rounded-md border border-line px-3 pr-10 text-sm transition-[border-color,box-shadow] duration-200 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235/0.12)] focus:outline-none" />
             <button type="button" aria-label={show ? 'Hide password' : 'Show password'} onClick={() => setShow((s) => !s)}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted">
               {show ? <EyeOff size={16} /> : <Eye size={16} />}

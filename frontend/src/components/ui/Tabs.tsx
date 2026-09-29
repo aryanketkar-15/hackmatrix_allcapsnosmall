@@ -35,8 +35,8 @@ export function Tabs({
       {items.map((t) => {
         const active = t.id === value;
         const base = variant === 'underline'
-          ? `-mb-px border-b-2 px-0.5 pb-2.5 pt-1 text-sm ${active ? 'border-primary font-semibold text-primary' : 'border-transparent text-muted hover:text-ink'}`
-          : `rounded-full px-3 py-1 text-xs font-medium ${active ? 'bg-primary text-white' : 'bg-surface text-muted border border-line hover:text-ink'}`;
+          ? `relative -mb-px px-0.5 pb-2.5 pt-1 text-sm transition-colors duration-200 after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:origin-left after:rounded-full after:bg-primary after:transition-transform after:duration-300 after:ease-out ${active ? 'font-semibold text-primary after:scale-x-100' : 'text-muted after:scale-x-0 hover:text-ink hover:after:scale-x-50 hover:after:bg-slate-300'}`
+          : `rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 active:scale-95 ${active ? 'bg-primary text-white shadow-sm' : 'border border-line bg-surface text-muted hover:border-slate-300 hover:text-ink'}`;
         return (
           <button
             key={t.id}

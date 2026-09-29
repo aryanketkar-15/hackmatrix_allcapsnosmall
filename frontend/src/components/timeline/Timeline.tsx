@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { dateKeyIST, formatDateIST, formatTimeIST } from '../../lib/format';
+import { stagger } from '../../lib/motion';
 import type { TimelineEntryT } from '../../types/contract';
 
 type Cat = TimelineEntryT['category'];
@@ -53,17 +54,18 @@ export function Timeline({ entries, selection, onSelect, overlay = [] }: Props) 
         <section key={g.key} aria-label={g.label}>
           <h3 className="mb-2 text-sm font-semibold">{g.label}</h3>
           <ol className="relative space-y-0.5 border-l border-line pl-0">
-            {g.items.map((e) => {
+            {g.items.map((e, idx) => {
               const sel = isSelected(e);
               const muted = overlay.includes(e.id);
               const style = CATEGORY_STYLE[e.category];
               return (
                 <li
                   key={e.id}
+                  style={stagger(idx, 35)}
                   ref={sel ? selectedRef : undefined}
                   data-testid={`tl-${e.id}`}
                   aria-current={sel ? 'true' : undefined}
-                  className={`relative grid cursor-pointer grid-cols-[3.2rem_1fr_auto] items-start gap-3 rounded-md py-2 pl-5 pr-3 ${sel ? 'bg-primary-soft ring-1 ring-primary' : 'hover:bg-page'} ${muted ? 'opacity-50' : ''} ${e.gap ? 'border border-dashed border-amber-400 bg-amber-50/60' : ''}`}
+                  className={`relative grid animate-fade-up cursor-pointer grid-cols-[3.2rem_1fr_auto] items-start gap-3 rounded-md py-2 pl-5 pr-3 transition-colors duration-150 ${sel ? 'bg-primary-soft ring-1 ring-primary' : 'hover:bg-page'} ${muted ? 'opacity-50' : ''} ${e.gap ? 'border border-dashed border-amber-400 bg-amber-50/60' : ''}`}
                   onClick={() => onSelect(e.txnId ? { kind: 'txn', id: e.txnId } : { kind: 'event', id: e.id })}
                 >
                   <span className="absolute -left-[5px] top-3.5 h-2.5 w-2.5 rounded-full ring-2 ring-white" style={{ backgroundColor: e.gap ? '#d97706' : style.dot }} aria-hidden />

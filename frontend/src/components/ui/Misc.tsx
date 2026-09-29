@@ -3,7 +3,7 @@ import { Inbox } from 'lucide-react';
 
 export function EmptyState({ title, hint, icon }: { title: string; hint?: string; icon?: ReactNode }) {
   return (
-    <div className="flex flex-col items-center gap-1.5 px-4 py-10 text-center" role="status">
+    <div className="flex animate-fade-in flex-col items-center gap-1.5 px-4 py-10 text-center" role="status">
       <span className="text-muted" aria-hidden>{icon ?? <Inbox size={28} />}</span>
       <p className="text-sm font-medium text-ink">{title}</p>
       {hint ? <p className="max-w-md text-xs text-muted">{hint}</p> : null}
@@ -16,7 +16,7 @@ export function Tooltip({ text, children }: { text: string; children: ReactNode 
   return (
     <span className="group relative inline-flex" tabIndex={0} aria-label={text}>
       {children}
-      <span role="tooltip" className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 hidden w-max max-w-64 -translate-x-1/2 rounded bg-ink px-2 py-1 text-[11px] font-normal normal-case tracking-normal text-white shadow group-hover:block group-focus:block">
+      <span role="tooltip" className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 hidden w-max animate-fade-in max-w-64 -translate-x-1/2 rounded bg-ink px-2 py-1 text-[11px] font-normal normal-case tracking-normal text-white shadow group-hover:block group-focus:block">
         {text}
       </span>
     </span>

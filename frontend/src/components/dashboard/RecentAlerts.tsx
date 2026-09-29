@@ -3,6 +3,7 @@ import { Card, CardHeader, EmptyState, LevelChip, Table, Td, Th, Tr } from '../u
 import { formatInr, formatRelativeToAsOf } from '../../lib/format';
 import { involvedEntitiesText } from '../../lib/metrics';
 import { alertsNewestFirst } from '../../data/selectors';
+import { stagger } from '../../lib/motion';
 import type { AlertT } from '../../types/contract';
 
 export function RecentAlerts({ alerts, asOf, count = 5 }: { alerts: AlertT[]; asOf: string; count?: number }) {
@@ -15,8 +16,8 @@ export function RecentAlerts({ alerts, asOf, count = 5 }: { alerts: AlertT[]; as
         <Table label="Recent alerts">
           <thead><tr><Th>Time</Th><Th>Risk</Th><Th>Alert Title</Th><Th>Amount</Th><Th>Involved Entities</Th></tr></thead>
           <tbody>
-            {rows.map((a) => (
-              <Tr key={a.id} onClick={() => navigate(`/alerts/${a.id}/overview`)}>
+            {rows.map((a, i) => (
+              <Tr key={a.id} className="animate-fade-in" style={stagger(i, 50)} onClick={() => navigate(`/alerts/${a.id}/overview`)}>
                 <Td className="whitespace-nowrap">{formatRelativeToAsOf(a.createdAt, asOf)}</Td>
                 <Td><LevelChip level={a.level} /></Td>
                 <Td><Link to={`/alerts/${a.id}/overview`} className="font-medium text-ink hover:text-primary">{a.title}</Link></Td>

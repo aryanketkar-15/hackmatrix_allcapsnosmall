@@ -70,14 +70,14 @@ export function GlobalSearch() {
         disabled={!ready}
         value={raw}
         placeholder="Search for accounts, transactions, employees, customers…   ( / )"
-        className="h-8 w-full rounded-md border border-line bg-surface pl-7 pr-2.5 text-xs placeholder:text-muted/80 disabled:opacity-60"
+        className="h-8 w-full rounded-md border border-line bg-surface pl-7 pr-2.5 text-xs transition-[border-color,box-shadow] duration-200 placeholder:text-muted/80 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235/0.12)] focus:outline-none disabled:opacity-60"
         onFocus={() => { setOpen(true); loadAllScenarios(); }}
         onChange={(e) => { setRaw(e.target.value); setOpen(true); }}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
         onKeyDown={onKeyDown}
       />
       {open && q.trim() ? (
-        <ul id="global-search-results" role="listbox" className="absolute left-0 right-0 top-full z-40 mt-1 max-h-96 overflow-auto rounded-md border border-line bg-surface py-1 text-xs shadow-lg">
+        <ul id="global-search-results" role="listbox" className="absolute left-0 right-0 top-full z-40 mt-1 max-h-96 origin-top animate-scale-in overflow-auto rounded-md border border-line bg-surface py-1 text-xs shadow-lg">
           {results.length === 0 ? (
             <li className="px-3 py-2 text-muted">No matches for “{q}”</li>
           ) : results.map((r, i) => {
@@ -90,7 +90,7 @@ export function GlobalSearch() {
                   type="button"
                   role="option"
                   aria-selected={i === active}
-                  className={`flex w-full flex-col px-3 py-1.5 text-left ${i === active ? 'bg-primary-soft' : 'hover:bg-page'}`}
+                  className={`flex w-full flex-col px-3 py-1.5 text-left transition-colors duration-100 ${i === active ? 'bg-primary-soft' : 'hover:bg-page'}`}
                   onMouseDown={(e) => { e.preventDefault(); go(r); }}
                   onMouseEnter={() => setActive(i)}
                 >

@@ -1,10 +1,13 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { DataGate } from './DataGate';
 import { FallbackBanner } from '../ui';
 
 export function AppShell() {
+  const { pathname } = useLocation();
+  // pages fade in on navigation; sub-tabs of the same page (/alerts/:id/:tab) keep the page mounted
+  const routeKey = pathname.split('/').slice(0, 3).join('/');
   return (
     <div className="flex h-full min-h-screen">
       <Sidebar />
@@ -13,7 +16,7 @@ export function AppShell() {
         <FallbackBanner />
         <main className="min-w-0 flex-1 overflow-y-auto p-6" id="main">
           <DataGate>
-            <Outlet />
+            <div key={routeKey} className="animate-fade-up"><Outlet /></div>
           </DataGate>
         </main>
       </div>

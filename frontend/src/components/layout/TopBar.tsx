@@ -18,16 +18,16 @@ export function TopBar() {
         <PrototypeBadge />
         <NotificationBell />
         <div className="relative">
-          <button type="button" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)} className="flex items-center gap-2.5 rounded-md p-1 hover:bg-page">
+          <button type="button" aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)} className="flex items-center gap-2.5 rounded-md p-1 transition-colors duration-150 hover:bg-page">
             <Avatar initials={user?.initials ?? '?'} size={30} />
             <span className="text-left leading-tight">
               <span className="block text-[13px] font-semibold">{user?.name ?? 'Signed out'}</span>
               <span className="block text-[11px] text-muted">{user?.role ?? ''}</span>
             </span>
-            <ChevronDown size={14} className="text-muted" aria-hidden />
+            <ChevronDown size={14} className={`text-muted transition-transform duration-200 ${menu ? 'rotate-180' : ''}`} aria-hidden />
           </button>
           {menu ? (
-            <div role="menu" className="absolute right-0 z-40 mt-1 w-40 rounded-md border border-line bg-surface py-1 shadow-lg">
+            <div role="menu" className="absolute right-0 z-40 mt-1 w-40 origin-top-right animate-scale-in rounded-md border border-line bg-surface py-1 shadow-lg">
               <button role="menuitem" type="button" className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-page"
                 onClick={() => { signOut(); navigate('/login', { replace: true }); }}>
                 <LogOut size={14} aria-hidden /> Sign out

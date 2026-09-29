@@ -10,6 +10,7 @@ import { EMPTY_FILTERS, PAGE_SIZE, filterAlerts, pageCount, type AlertFilters } 
 import { alertsNewestFirst } from '../data/selectors';
 import { formatInr, formatDayMonthIST, formatTimeIST } from '../lib/format';
 import { downloadText, toCsv } from '../lib/csv';
+import { stagger } from '../lib/motion';
 
 export default function Alerts() {
   const { alerts } = useReady();
@@ -86,8 +87,8 @@ export default function Alerts() {
               <tr><Th>ID</Th><Th>Time</Th><Th>Risk</Th><Th>Alert Title</Th><Th>Amount</Th><Th>Type</Th><Th>Status</Th></tr>
             </thead>
             <tbody>
-              {rows.map((a) => (
-                <Tr key={a.id} onClick={() => navigate(`/alerts/${a.id}/overview`)}>
+              {rows.map((a, i) => (
+                <Tr key={a.id} className="animate-fade-in" style={stagger(i, 25)} onClick={() => navigate(`/alerts/${a.id}/overview`)}>
                   <Td className="whitespace-nowrap font-medium">{a.id}</Td>
                   <Td className="whitespace-nowrap text-muted">{formatDayMonthIST(a.createdAt)}, {formatTimeIST(a.createdAt)}</Td>
                   <Td><LevelChip level={a.level} /></Td>

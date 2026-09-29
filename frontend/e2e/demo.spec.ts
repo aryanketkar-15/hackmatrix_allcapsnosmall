@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
 const SHOTS = 'test-results/screens';
-const shot = (page: Page, name: string) => page.screenshot({ path: `${SHOTS}/${name}.png` });
+const shot = async (page: Page, name: string) => { await page.waitForTimeout(1100); await page.screenshot({ path: `${SHOTS}/${name}.png` }); }; // let entrance animations settle
 
 test.describe('KHOJI demo path', () => {
   test('login → dashboard → alert investigation → workflow → report → evaluation', async ({ page }) => {
@@ -131,6 +131,26 @@ test.describe('KHOJI demo path', () => {
     await shot(page, '16-evaluation');
 
     expect(problems, problems.join('\n')).toEqual([]);
+  });
+
+  test('entrance animations run, and reduced motion switches the JS-driven ones off', async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem('khoji.session', JSON.stringify({ username: 'priya.sharma' })));
+    await page.goto('/dashboard');
+    // the skeleton shimmers while loading, then the page and KPI cards fade up
+    await expect.poll(() => page.evaluate(() => document.getAnimations().map((a) => (a as CSSAnimation).animationName).includes('shimmer'))).toBe(true).catch(() => {});
+    await page.getByTestId('kpi-Total Alerts').waitFor();
+    const names = await page.evaluate(() => document.getAnimations().map((a) => (a as CSSAnimation).animationName));
+    expect(names).toEqual(expect.arrayContaining(['fade-up']));
+    // count-up: the number climbs to the final value
+    await expect(page.getByTestId('kpi-Total Alerts')).toContainText('124');
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.reload();
+    // with reduced motion the final value is shown immediately (no count-up) and nothing loops
+    await expect(page.getByTestId('kpi-Total Alerts')).toContainText('124', { timeout: 500 });
+    await page.waitForTimeout(300);
+    const looping = await page.evaluate(() => document.getAnimations().filter((a) => a.effect?.getTiming().iterations === Infinity).length);
+    expect(looping).toBe(0);
   });
 
   test('protected routes redirect to login when signed out', async ({ page }) => {

@@ -28,17 +28,17 @@ export function NotificationBell() {
   return (
     <div className="relative">
       <button type="button" aria-label={`Notifications${unread ? `, ${unread} unread` : ''}`} aria-haspopup="menu" aria-expanded={open}
-        onClick={toggle} className="relative rounded-full p-1.5 text-muted hover:bg-page">
+        onClick={toggle} className="relative rounded-full p-1.5 text-muted transition-colors duration-150 hover:bg-page hover:text-ink">
         <Bell size={17} />
         {unread > 0 ? (
-          <span data-testid="bell-unread" className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-risk-high px-1 text-[10px] font-semibold text-white">{unread}</span>
+          <span data-testid="bell-unread" className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 animate-pop items-center justify-center rounded-full bg-risk-high px-1 text-[10px] font-semibold text-white">{unread}</span>
         ) : null}
       </button>
       {open ? (
-        <div role="menu" aria-label="Recent high-risk alerts" className="absolute right-0 z-40 mt-1 w-80 rounded-md border border-line bg-surface py-1 shadow-lg">
+        <div role="menu" aria-label="Recent high-risk alerts" className="absolute right-0 z-40 mt-1 w-80 origin-top-right animate-scale-in rounded-md border border-line bg-surface py-1 shadow-lg">
           <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted">Recent high-risk alerts</p>
           {items.length === 0 ? <p className="px-3 py-3 text-xs text-muted">No high-risk alerts.</p> : items.map((a) => (
-            <button key={a.id} role="menuitem" type="button" className="flex w-full flex-col gap-0.5 px-3 py-2 text-left hover:bg-page"
+            <button key={a.id} role="menuitem" type="button" className="flex w-full flex-col gap-0.5 px-3 py-2 text-left transition-colors duration-150 hover:bg-page"
               onClick={() => { setOpen(false); navigate(`/alerts/${a.id}/overview`); }}>
               <span className="flex items-center gap-2"><LevelChip level={a.level} /><span className="text-[11px] text-muted">{a.id}</span></span>
               <span className="text-xs font-medium text-ink">{a.title}</span>

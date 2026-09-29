@@ -1,4 +1,5 @@
 import { CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { canAnimate } from '../../lib/motion';
 import { Card, CardHeader, EmptyState } from '../ui';
 import { countBy, percentages, topPatterns, weeklyByType } from '../../lib/metrics';
 import { TYPE_LABEL, ALERT_TYPES, type AlertT, type AlertTypeT } from '../../types/contract';
@@ -37,7 +38,7 @@ export function AlertAnalytics({ alerts, startKey }: { alerts: AlertT[]; startKe
                   <XAxis dataKey="label" tick={{ fontSize: 10, fill: '#566072' }} tickLine={false} />
                   <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: '#566072' }} tickLine={false} axisLine={false} />
                   <Tooltip contentStyle={{ fontSize: 12 }} />
-                  {top5.map((t) => <Line key={t} type="monotone" dataKey={t} name={TYPE_LABEL[t]} stroke={TYPE_COLORS[t]} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={false} />)}
+                  {top5.map((t) => <Line key={t} type="monotone" dataKey={t} name={TYPE_LABEL[t]} stroke={TYPE_COLORS[t]} strokeWidth={2} dot={{ r: 2 }} isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out" />)}
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -56,7 +57,7 @@ export function AlertAnalytics({ alerts, startKey }: { alerts: AlertT[]; startKe
             <div className="relative mx-auto h-44 w-44" role="img" aria-label="Donut chart of alerts by type">
               <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <PieChart>
-                  <Pie data={dist} dataKey="count" nameKey="type" innerRadius={54} outerRadius={80} paddingAngle={1} stroke="none" isAnimationActive={false}>
+                  <Pie data={dist} dataKey="count" nameKey="type" innerRadius={54} outerRadius={80} paddingAngle={1} stroke="none" isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out">
                     {dist.map((d) => <Cell key={d.type} fill={TYPE_COLORS[d.type]} />)}
                   </Pie>
                 </PieChart>

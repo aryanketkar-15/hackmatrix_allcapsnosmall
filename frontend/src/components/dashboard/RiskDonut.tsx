@@ -1,4 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { canAnimate } from '../../lib/motion';
 import { Card, CardHeader, EmptyState } from '../ui';
 import { riskDistribution } from '../../lib/metrics';
 import { LEVEL_LABEL, type AlertT } from '../../types/contract';
@@ -15,7 +16,7 @@ export function RiskDonut({ alerts }: { alerts: AlertT[] }) {
           <div className="relative h-36 w-36 shrink-0" role="img" aria-label="Donut chart of alerts by risk level">
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <PieChart>
-                <Pie data={dist} dataKey="count" nameKey="level" innerRadius={44} outerRadius={64} paddingAngle={1} stroke="none" isAnimationActive={false}>
+                <Pie data={dist} dataKey="count" nameKey="level" innerRadius={44} outerRadius={64} paddingAngle={1} stroke="none" isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out">
                   {dist.map((d) => <Cell key={d.level} fill={LEVEL_STYLE[d.level].dot} />)}
                 </Pie>
               </PieChart>

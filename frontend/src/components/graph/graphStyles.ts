@@ -1,12 +1,12 @@
 import type { StylesheetStyle } from 'cytoscape';
 
 export const GRAPH_STYLE: StylesheetStyle[] = [
-  { selector: 'node', style: { label: 'data(label)', 'font-family': 'Inter, sans-serif', 'font-size': 11, 'text-wrap': 'wrap', color: '#111827', 'text-valign': 'bottom', 'text-margin-y': 6, width: 46, height: 46, 'border-width': 2 } },
+  { selector: 'node', style: { 'transition-property': 'border-color, border-width, opacity, background-color', 'transition-duration': 220, 'transition-timing-function': 'ease-out', label: 'data(label)', 'font-family': 'Inter, sans-serif', 'font-size': 11, 'text-wrap': 'wrap', color: '#111827', 'text-valign': 'bottom', 'text-margin-y': 6, width: 46, height: 46, 'border-width': 2 } },
   { selector: 'node.account', style: { width: 88, height: 88, 'background-color': '#2563eb', 'border-color': '#1d4ed8', color: '#ffffff', 'text-valign': 'center', 'text-margin-y': 0, 'font-weight': 700, 'font-size': 12 } },
   { selector: 'node.customer', style: { 'background-color': '#dcfce7', 'border-color': '#16a34a' } },
   { selector: 'node.employee', style: { 'background-color': '#fee2e2', 'border-color': '#dc2626' } },
   { selector: 'node.beneficiary', style: { 'background-color': '#ede9fe', 'border-color': '#7c3aed' } },
-  { selector: 'edge', style: { width: 2, 'curve-style': 'bezier', 'line-color': '#94a3b8', 'target-arrow-color': '#94a3b8', 'target-arrow-shape': 'triangle', label: 'data(label)', 'font-size': 10, color: '#334155', 'text-background-color': '#ffffff', 'text-background-opacity': 0.9, 'text-background-padding': '2px', 'text-rotation': 'autorotate' } },
+  { selector: 'edge', style: { 'transition-property': 'line-color, target-arrow-color, opacity, width', 'transition-duration': 220, 'transition-timing-function': 'ease-out', width: 2, 'curve-style': 'bezier', 'line-color': '#94a3b8', 'target-arrow-color': '#94a3b8', 'target-arrow-shape': 'triangle', label: 'data(label)', 'font-size': 10, color: '#334155', 'text-background-color': '#ffffff', 'text-background-opacity': 0.9, 'text-background-padding': '2px', 'text-rotation': 'autorotate' } },
   { selector: 'edge.cycle', style: { width: 3, 'line-color': '#dc2626', 'target-arrow-color': '#dc2626', color: '#b91c1c' } },
   { selector: 'edge.blocked', style: { 'line-style': 'dashed', 'line-color': '#9ca3af', 'target-arrow-color': '#9ca3af' } },
   { selector: 'edge.owner', style: { 'line-style': 'dotted', 'line-color': '#cbd5e1', 'target-arrow-shape': 'none', label: '' } },

@@ -4,8 +4,8 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md';
 
 const VARIANT: Record<Variant, string> = {
-  primary: 'bg-primary text-white hover:bg-primary-dark disabled:bg-primary/50',
-  secondary: 'bg-surface text-ink border border-line hover:bg-page disabled:text-muted/60',
+  primary: 'bg-primary text-white shadow-sm hover:bg-primary-dark hover:shadow-md disabled:bg-primary/50 disabled:shadow-none',
+  secondary: 'bg-surface text-ink border border-line shadow-[0_1px_1px_rgb(16_24_40/0.04)] hover:border-slate-300 hover:bg-page disabled:text-muted/60',
   ghost: 'bg-transparent text-primary hover:bg-primary-soft disabled:text-muted/60',
   danger: 'bg-risk-high text-white hover:bg-red-700 disabled:bg-risk-high/50',
 };
@@ -21,7 +21,7 @@ export function Button({ variant = 'primary', size = 'md', icon, className = '',
   return (
     <button
       type={type}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-colors disabled:cursor-not-allowed ${pad} ${VARIANT[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-all duration-150 ease-out active:scale-[0.97] active:shadow-none disabled:cursor-not-allowed disabled:active:scale-100 ${pad} ${VARIANT[variant]} ${className}`}
       {...rest}
     >
       {icon}

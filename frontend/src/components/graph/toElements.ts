@@ -58,10 +58,12 @@ export function toElements(s: ScenarioT): ElementDefinition[] {
   return out;
 }
 
-export function layoutOptions(name: GraphLayoutName): LayoutOptions {
+/** `animate` glides nodes to their new positions when the layout is switched (off in tests and for reduced motion). */
+export function layoutOptions(name: GraphLayoutName, animate = false): LayoutOptions {
+  const motion = { animate, animationDuration: 550, animationEasing: 'ease-in-out-cubic' };
   switch (name) {
-    case 'cose': return { name: 'cose', randomize: false, animate: false, fit: true, padding: 40 } as LayoutOptions;
-    case 'circle': return { name: 'circle', animate: false, fit: true, padding: 40 } as LayoutOptions;
-    default: return { name: 'preset', fit: true, padding: 40 } as LayoutOptions;
+    case 'cose': return { name: 'cose', randomize: false, fit: true, padding: 40, ...motion } as LayoutOptions;
+    case 'circle': return { name: 'circle', fit: true, padding: 40, ...motion } as LayoutOptions;
+    default: return { name: 'preset', fit: true, padding: 40, ...motion } as LayoutOptions;
   }
 }

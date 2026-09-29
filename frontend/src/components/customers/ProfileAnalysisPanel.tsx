@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { canAnimate } from '../../lib/motion';
 import { Bar, BarChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Card, CardHeader, EmptyState } from '../ui';
 import { analyzeProfile } from '../../lib/profileAnalysis';
@@ -38,8 +39,8 @@ export function ProfileAnalysisPanel({ customer }: { customer: CustomerT }) {
               <YAxis tick={{ fontSize: 10, fill: '#566072' }} tickLine={false} axisLine={false} tickFormatter={(v) => `${Math.round(Number(v) / 100000)}L`} />
               <Tooltip formatter={(v) => formatInr(Number(v))} contentStyle={{ fontSize: 12 }} />
               <ReferenceLine y={a.declaredMonthly} stroke="#dc2626" strokeDasharray="4 3" label={{ value: 'Declared monthly income', position: 'insideTopLeft', fontSize: 10, fill: '#b91c1c' }} />
-              <Bar dataKey="inflow" name="Inflow" fill="#2563eb" isAnimationActive={false} />
-              <Bar dataKey="outflow" name="Outflow" fill="#94a3b8" isAnimationActive={false} />
+              <Bar dataKey="inflow" name="Inflow" fill="#2563eb" isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out" />
+              <Bar dataKey="outflow" name="Outflow" fill="#94a3b8" isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out" />
             </BarChart>
           </ResponsiveContainer>
         </div>

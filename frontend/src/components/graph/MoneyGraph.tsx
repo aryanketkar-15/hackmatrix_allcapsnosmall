@@ -4,6 +4,7 @@ import type { ScenarioT } from '../../types/contract';
 import type { Selection } from '../../data/store';
 import { GRAPH_STYLE } from './graphStyles';
 import { hasPositions, layoutOptions, toElements, type GraphLayoutName } from './toElements';
+import { canAnimate } from '../../lib/motion';
 
 export interface MoneyGraphHandle { zoomBy: (f: number) => void; fit: () => void; container: () => HTMLDivElement | null; png: () => string | undefined }
 
@@ -23,6 +24,7 @@ const isJsdom = () => typeof navigator !== 'undefined' && /jsdom/i.test(navigato
 export const MoneyGraph = forwardRef<MoneyGraphHandle, Props>(function MoneyGraph({ scenario, layout, selection, onSelect, height = 460, mutedTxnIds = [] }, ref) {
   const el = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const firstLayout = useRef(true);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
@@ -63,7 +65,9 @@ export const MoneyGraph = forwardRef<MoneyGraphHandle, Props>(function MoneyGrap
       console.warn(`Scenario ${scenario.id} has no node positions; using the force layout instead.`);
       name = 'cose';
     }
-    cy.layout(layoutOptions(name)).run();
+    // the very first layout is placed instantly; later switches glide
+    cy.layout(layoutOptions(name, canAnimate() && !firstLayout.current)).run();
+    firstLayout.current = false;
   }, [layout, scenario]);
 
   // external selection → highlight
@@ -84,5 +88,5 @@ export const MoneyGraph = forwardRef<MoneyGraphHandle, Props>(function MoneyGrap
     if (mutedTxnIds.length) cy.edges().filter((e) => mutedTxnIds.includes(e.data('txnId'))).addClass('muted');
   }, [mutedTxnIds, scenario]);
 
-  return <div ref={el} data-graph-canvas style={{ height }} className="w-full rounded-md bg-white" role="img" aria-label={`Money-flow graph for ${scenario.title}`} />;
+  return <div ref={el} data-graph-canvas style={{ height }} className="w-full animate-fade-in rounded-md bg-white" role="img" aria-label={`Money-flow graph for ${scenario.title}`} />;
 });

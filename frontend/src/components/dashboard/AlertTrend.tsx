@@ -1,4 +1,5 @@
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { canAnimate } from '../../lib/motion';
 import { Card, CardHeader, EmptyState } from '../ui';
 import { TREND_LEVELS, trendSeries } from '../../lib/metrics';
 import { LEVEL_LABEL, type AlertT } from '../../types/contract';
@@ -28,7 +29,7 @@ export function AlertTrend({ alerts, startKey, endKey }: { alerts: AlertT[]; sta
               <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: '#566072' }} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={{ fontSize: 12, borderRadius: 6 }} />
               {TREND_LEVELS.map((l) => (
-                <Line key={l} type="monotone" dataKey={l} name={LEVEL_LABEL[l]} stroke={LEVEL_STYLE[l].dot} strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Line key={l} type="monotone" dataKey={l} name={LEVEL_LABEL[l]} stroke={LEVEL_STYLE[l].dot} strokeWidth={2} dot={false} isAnimationActive={canAnimate()} animationDuration={900} animationEasing="ease-out" />
               ))}
             </LineChart>
           </ResponsiveContainer>

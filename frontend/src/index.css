@@ -22,10 +22,36 @@
 
   --color-dep: #4338ca; /* dependency roles use indigo, not green (deviation C8) */
   --color-dep-soft: #eef2ff;
+
+  /* ---- motion ----
+     `backwards` fill only: the element returns to its normal (transform-free) state afterwards, so it never
+     becomes a containing block for fixed/absolute descendants once the animation has finished. */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-in: fade-in 0.3s var(--ease-out-soft) backwards;
+  --animate-fade-up: fade-up 0.42s var(--ease-out-soft) backwards;
+  --animate-scale-in: scale-in 0.16s var(--ease-out-soft) backwards;
+  --animate-slide-in: slide-in 0.28s var(--ease-out-soft) backwards;
+  --animate-grow-x: grow-x 0.7s var(--ease-out-soft) backwards;
+  --animate-rise: rise 0.9s var(--ease-out-soft) backwards;
+  --animate-pop: pop 0.35s var(--ease-out-soft) backwards;
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes scale-in { from { opacity: 0; transform: scale(0.96) translateY(-3px); } to { opacity: 1; transform: none; } }
+  @keyframes slide-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+  @keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes rise { from { opacity: 0; transform: scaleY(0.25); } to { opacity: 1; transform: scaleY(1); } }
+  @keyframes pop { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.18); } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 }
 
 @layer base {
   html, body, #root { height: 100%; }
+  html { scroll-behavior: auto; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   body {
     margin: 0;
     background: var(--color-page);
@@ -33,15 +59,48 @@
     font-family: var(--font-sans);
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
-  dialog::backdrop { background: rgb(17 24 39 / 0.45); }
+  ::selection { background: rgb(37 99 235 / 0.18); }
+  :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 4px; }
+
+  /* dialogs: native <dialog>, so the backdrop and the box animate in */
+  dialog[open] { animation: scale-in 0.18s var(--ease-out-soft); }
+  dialog::backdrop { background: rgb(17 24 39 / 0.45); backdrop-filter: blur(2px); }
+  dialog[open]::backdrop { animation: fade-in 0.2s ease-out; }
+
+  /* slim, quiet scrollbars */
+  * { scrollbar-width: thin; scrollbar-color: #cbd2dc transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb { background: #cbd2dc; border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+  *::-webkit-scrollbar-thumb:hover { background: #aab3c0; background-clip: content-box; border: 2px solid transparent; }
+
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   }
+}
+
+@layer components {
+  /* skeleton blocks for loading states */
+  .skeleton {
+    background: linear-gradient(90deg, #eceff4 25%, #f6f8fb 50%, #eceff4 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  /* login skyline buildings grow up from the ground line */
+  .skyline-rise > rect { transform-box: fill-box; transform-origin: bottom; animation: rise 0.9s var(--ease-out-soft) backwards; }
+  .skyline-rise > rect:nth-child(1) { animation-delay: 0.05s; }
+  .skyline-rise > rect:nth-child(2) { animation-delay: 0.12s; }
+  .skyline-rise > rect:nth-child(3) { animation-delay: 0.2s; }
+  .skyline-rise > rect:nth-child(4) { animation-delay: 0.28s; }
+  .skyline-rise > rect:nth-child(5) { animation-delay: 0.36s; }
+  .skyline-rise > rect:nth-child(6) { animation-delay: 0.44s; }
+  .skyline-rise > rect:nth-child(7) { animation-delay: 0.52s; }
 }
 
 @media print {
   body { background: #fff; }
   .no-print { display: none !important; }
+  * { animation: none !important; }
 }

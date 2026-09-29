@@ -23,7 +23,7 @@ export function Td({ className = '', children, ...rest }: TdHTMLAttributes<HTMLT
 export function Tr({ className = '', children, onClick, ...rest }: HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
-      className={`${onClick ? 'cursor-pointer hover:bg-primary-soft/60' : ''} ${className}`}
+      className={`transition-colors duration-150 ${onClick ? 'cursor-pointer hover:bg-primary-soft/60' : ''} ${className}`}
       onClick={onClick}
       {...rest}
     >
